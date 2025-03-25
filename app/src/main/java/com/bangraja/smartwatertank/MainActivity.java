@@ -3,6 +3,7 @@ package com.bangraja.smartwatertank;
 import android.os.Bundle;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -14,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
     private TextView pressure, height, water_volume;
     private Switch bukaKeran;
-    private DatabaseReference sensor, keran;
+    private DatabaseReference sensor, perintah;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Inisialisasi Firebase Database Reference
         sensor = FirebaseDatabase.getInstance().getReference("tb_ukuran");
-        keran = FirebaseDatabase.getInstance().getReference("keran");
+        perintah = FirebaseDatabase.getInstance().getReference("perintah");
 
         // Ambil data dari database secara real-time
         sensor.addValueEventListener(new ValueEventListener() {
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 Long pressureValue = snapshot.child("pressure").getValue(Long.class);
                 Double waterVolumeValue = snapshot.child("water_volume").getValue(Double.class);
 
-                pressure.setText(pressureValue != null ?        "Tekanan\t\t \t" + String.valueOf(pressureValue) + " Pa" : "N/A");
+                pressure.setText(pressureValue != null ?        "Tekanan\t\t \t" + pressureValue + " Pa" : "N/A");
                 height.setText(heightValue != null ?            "Ketinggian\t \t" + String.format("%.5f", heightValue) + " m" : "N/A");
                 water_volume.setText(waterVolumeValue != null ? "Volume\t\t\t \t" + String.format("%.5f", waterVolumeValue) + " m^3" : "N/A");
             }
@@ -59,24 +60,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Baca status keran dari Firebase
-        keran.addValueEventListener(new ValueEventListener() {
+        perintah.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Boolean statusKeran = snapshot.getValue(Boolean.class);
-                if (statusKeran != null) {
-                    bukaKeran.setChecked(statusKeran);
+                if (snapshot.exists()) {
+                    Boolean statusKeran = snapshot.child("keran").getValue(Boolean.class);
+                    if (statusKeran != null) {
+                        bukaKeran.setChecked(statusKeran);
+                    }
+                } else {
+                    bukaKeran.setChecked(false); // Jika data tidak ada, set default false
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error
+                Toast.makeText(MainActivity.this, "Gagal memuat status keran", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Handle perubahan status switch
         bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            keran.setValue(isChecked);
+            perintah.child("keran").setValue(isChecked);
         });
     }
 }
