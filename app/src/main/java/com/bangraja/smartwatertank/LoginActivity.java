@@ -40,19 +40,18 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             progressBar.setVisibility(View.VISIBLE);
-            auth.signInWithEmailAndPassword(userEmail, userPassword)
-                    .addOnCompleteListener(task -> {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = auth.getCurrentUser();
-                            if (user != null) {
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
-                            }
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Login gagal: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            auth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(task -> {
+                progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    FirebaseUser user = auth.getCurrentUser();
+                    if (user != null) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login gagal: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 }
