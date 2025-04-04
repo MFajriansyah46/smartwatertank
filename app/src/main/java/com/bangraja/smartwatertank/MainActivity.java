@@ -24,12 +24,22 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int id = item.getItemId();
+
             if (id == R.id.nav_dashboard) {
                 selectedFragment = new DashboardActivity();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Dashboard");
+                }
             } else if (id == R.id.nav_statistik) {
                 selectedFragment = new StatistikActivity();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Statistik");
+                }
             } else if (id == R.id.nav_notifikasi) {
                 selectedFragment = new NotificationActivity();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Notifikasi");
+                }
             }
 
             if (selectedFragment != null) {

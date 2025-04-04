@@ -10,9 +10,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bread"
-        android:title="SMART WATER TANK"
-        android:titleTextColor="@android:color/white" />
+        app:title="SMART WATER TANK"
+        app:titleTextColor="@color/white"
+        android:background="@color/bread" />
 
     <!-- Fragment Container -->
     <FrameLayout
@@ -22,11 +22,14 @@
         android:layout_weight="1"
         android:background="@color/meat" />
 
-    <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bread"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemIconSize="26dp"
+        app:itemIconTint="@color/nav_icon_color"
+        app:itemTextColor="@color/nav_item_color"/>
+
 </LinearLayout>
