@@ -7,6 +7,6 @@
     <color name="meat">#010822</color>
     <color name="bread">#0A132F</color>
 
-    <color name="selected">##ffffff</color>
+    <color name="selected">#ffffff</color>
     <color name="unselected">#999999</color>
 </resources>
