@@ -1,0 +1,50 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/meat">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DASHBOARD"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tekanan: N/A"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ketinggian: N/A"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/water_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Volume: N/A"
+            android:textColor="@android:color/white" />
+
+        <Switch
+            android:id="@+id/bukaKeran"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Buka Keran"
+            android:textColor="@android:color/white"
+            android:thumbTint="@android:color/white"
+            android:trackTint="@android:color/white" />
+
+
+    </LinearLayout>
+</ScrollView>
