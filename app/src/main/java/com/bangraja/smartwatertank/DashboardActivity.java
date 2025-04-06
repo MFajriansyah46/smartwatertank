@@ -48,9 +48,9 @@ public class DashboardActivity extends Fragment {
                 Long pressureValue = snapshot.child("pressure").getValue(Long.class);
                 Double waterVolumeValue = snapshot.child("water_volume").getValue(Double.class);
 
-                pressure.setText(pressureValue != null ? "Tekanan: " + pressureValue + " Pa" : "N/A");
-                height.setText(heightValue != null ? "Ketinggian: " + String.format("%.5f", heightValue) + " m" : "N/A");
-                water_volume.setText(waterVolumeValue != null ? "Volume: " + String.format("%.5f", waterVolumeValue) + " L" : "N/A");
+                pressure.setText(pressureValue != null ? pressureValue + "" : "N/A");
+                height.setText(heightValue != null ? String.format("%.2f", heightValue): "N/A");
+                water_volume.setText(waterVolumeValue != null ? String.format("%.2f", waterVolumeValue): "N/A");
             }
 
             @Override
