@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
-    private Button loginBtn;
+    private Button loginBtn, exitBtn;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
 
@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         loginBtn = findViewById(R.id.loginBtn);
+        exitBtn = findViewById(R.id.exitBtn);
         progressBar = findViewById(R.id.progressBar);
 
         loginBtn.setOnClickListener(view -> {
@@ -52,6 +53,10 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Login gagal: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+        });
+
+        exitBtn.setOnClickListener(view -> {
+            finishAffinity();
         });
     }
 }
