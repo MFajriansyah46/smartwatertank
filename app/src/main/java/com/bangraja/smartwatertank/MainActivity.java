@@ -17,7 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         // Inisialisasi Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -28,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         // Inisialisasi toolbar
         toolbar = findViewById(R.id.toolbar);
