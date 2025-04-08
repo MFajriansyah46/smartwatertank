@@ -18,9 +18,9 @@
         android:theme="@style/Theme.SmartWaterTank"
         tools:targetApi="31">
 
-        <!-- MainActivity sebagai entry point aplikasi -->
+        <!-- SplashActivity sebagai launcher -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,11 +28,17 @@
             </intent-filter>
         </activity>
 
-        <!-- LoginActivity tanpa intent filter -->
+        <!-- MainActivity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+
+        <!-- LoginActivity -->
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
 
+        <!-- SettingsActivity -->
         <activity
             android:name=".SettingsActivity"
             android:exported="true" />
