@@ -1,87 +1,90 @@
 package com.bangraja.smartwatertank;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
+import android.view.Menu;
+import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView pressure, height, water_volume;
-    private Switch bukaKeran;
-    private DatabaseReference sensor, perintah;
+    private Toolbar toolbar;
+    private BottomNavigationView bottomNavigationView;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pressure = findViewById(R.id.pressure);
-        height = findViewById(R.id.height);
-        water_volume = findViewById(R.id.water_volume);
-        bukaKeran = findViewById(R.id.bukaKeran);
+        // Inisialisasi Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
-        // Inisialisasi Firebase Database Reference
-        sensor = FirebaseDatabase.getInstance().getReference("tb_ukuran");
-        perintah = FirebaseDatabase.getInstance().getReference("perintah");
+        // Cek apakah user sudah login
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+            return;
+        }
 
-        // Ambil data dari database secara real-time
-        sensor.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    pressure.setText("No data");
-                    height.setText("No data");
-                    water_volume.setText("No data");
-                    return;
+        // Inisialisasi toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Inisialisasi bottom navigation
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            int id = item.getItemId();
+
+            if (id == R.id.nav_dashboard) {
+                selectedFragment = new DashboardActivity();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Dashboard");
                 }
-
-                Double heightValue = snapshot.child("height").getValue(Double.class);
-                Long pressureValue = snapshot.child("pressure").getValue(Long.class);
-                Double waterVolumeValue = snapshot.child("water_volume").getValue(Double.class);
-
-                pressure.setText(pressureValue != null ?        "Tekanan\t\t \t" + pressureValue + " Pa" : "N/A");
-                height.setText(heightValue != null ?            "Ketinggian\t \t" + String.format("%.5f", heightValue) + " m" : "N/A");
-                water_volume.setText(waterVolumeValue != null ? "Volume\t\t\t \t" + String.format("%.5f", waterVolumeValue) + " m^3" : "N/A");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                pressure.setText("Error loading data");
-                height.setText("Error loading data");
-                water_volume.setText("Error loading data");
-            }
-        });
-
-        // Baca status keran dari Firebase
-        perintah.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    Boolean statusKeran = snapshot.child("keran").getValue(Boolean.class);
-                    if (statusKeran != null) {
-                        bukaKeran.setChecked(statusKeran);
-                    }
-                } else {
-                    bukaKeran.setChecked(false); // Jika data tidak ada, set default false
+            } else if (id == R.id.nav_statistik) {
+                selectedFragment = new StatistikActivity();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Statistik");
+                }
+            } else if (id == R.id.nav_notifikasi) {
+                selectedFragment = new NotificationActivity();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Notifikasi");
                 }
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Gagal memuat status keran", Toast.LENGTH_SHORT).show();
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, selectedFragment)
+                        .commit();
             }
+            return true;
         });
 
-        // Handle perubahan status switch
-        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            perintah.child("keran").setValue(isChecked);
-        });
+        // Set default fragment
+        bottomNavigationView.setSelectedItemId(R.id.nav_dashboard);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            // Navigasi ke halaman pengaturan
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
