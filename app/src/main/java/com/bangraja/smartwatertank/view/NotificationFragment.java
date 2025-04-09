@@ -1,4 +1,4 @@
-package com.bangraja.smartwatertank;
+package com.bangraja.smartwatertank.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-// Statistik Fragment
-public class StatistikActivity extends Fragment {
+import com.bangraja.smartwatertank.R;
+
+public class NotificationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_statistik, container, false);
+        return inflater.inflate(R.layout.activity_notification, container, false);
     }
 }
