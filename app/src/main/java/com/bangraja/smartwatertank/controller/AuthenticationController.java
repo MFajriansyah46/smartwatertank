@@ -7,7 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bangraja.smartwatertank.MainActivity;
+import com.bangraja.smartwatertank.Main;
 import com.bangraja.smartwatertank.model.AuthenticationModel;
 import com.bangraja.smartwatertank.view.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +30,7 @@ public class AuthenticationController {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             progressBar.setVisibility(View.GONE);
             if (task.isSuccessful()) {
-                Intent intent = new Intent(activity, MainActivity.class);
+                Intent intent = new Intent(activity, Main.class);
                 activity.startActivity(intent);
                 activity.finish();
             } else {

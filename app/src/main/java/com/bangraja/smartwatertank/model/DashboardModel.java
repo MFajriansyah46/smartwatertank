@@ -22,11 +22,11 @@ public class DashboardModel {
         transmiter.removeEventListener(listener);
     }
 
-    public void addPerintahListener(ValueEventListener listener) {
+    public void addCommandListener(ValueEventListener listener) {
         perintah.addValueEventListener(listener);
     }
 
-    public void removePerintahListener(ValueEventListener listener) {
+    public void removeCommandListener(ValueEventListener listener) {
         perintah.removeEventListener(listener);
     }
 

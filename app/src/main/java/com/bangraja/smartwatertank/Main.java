@@ -16,7 +16,7 @@ import com.bangraja.smartwatertank.view.AnalysisFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class Main extends AppCompatActivity {
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
     private FirebaseAuth mAuth;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Cek apakah user sudah login
         if (mAuth.getCurrentUser() == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(Main.this, LoginActivity.class));
             finish();
             return;
         }
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             // Navigasi ke halaman pengaturan
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            startActivity(new Intent(Main.this, SettingsActivity.class));
             return true;
         }
 

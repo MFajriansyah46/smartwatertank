@@ -1,4 +1,4 @@
-package com.bangraja.smartwatertank;
+package com.bangraja.smartwatertank.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bangraja.smartwatertank.view.LoginActivity;
+import com.bangraja.smartwatertank.Main;
+import com.bangraja.smartwatertank.R;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_DURATION = 2000; // 2 detik
@@ -30,8 +31,8 @@ public class SplashActivity extends AppCompatActivity {
 
         // Lanjut ke LoginActivity setelah delay
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-            finish(); // agar tidak bisa kembali ke splash
+            startActivity(new Intent(SplashActivity.this, Main.class));
+            finish();
         }, SPLASH_DURATION);
     }
 }

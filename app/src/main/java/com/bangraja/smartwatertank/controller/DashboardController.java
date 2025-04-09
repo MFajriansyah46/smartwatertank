@@ -57,13 +57,13 @@ public class DashboardController {
                 // Handle possible errors.
             }
         };
-        dm.addPerintahListener(perintahListener);
+        dm.addCommandListener(perintahListener);
 
         bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> dm.updateKeranStatus(isChecked));
     }
 
     public void cleanup() {
         dm.removeTransmiterListener(null);
-        dm.removePerintahListener(null);
+        dm.removeCommandListener(null);
     }
 }
