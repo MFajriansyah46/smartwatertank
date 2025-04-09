@@ -33,10 +33,4 @@ public class DashboardFragment extends Fragment {
 
         return view;
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        dc.cleanup();
-    }
 }

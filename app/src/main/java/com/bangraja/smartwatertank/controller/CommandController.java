@@ -35,7 +35,7 @@ public class CommandController {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(activity, "Gagal memuat status keran", Toast.LENGTH_SHORT).show();
+
             }
         });
 

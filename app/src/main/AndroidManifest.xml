@@ -35,12 +35,12 @@
 
         <!-- LoginActivity -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:exported="true" />
 
         <!-- SettingsActivity -->
         <activity
-            android:name=".SettingsActivity"
+            android:name=".view.SettingsActivity"
             android:exported="true" />
     </application>
 

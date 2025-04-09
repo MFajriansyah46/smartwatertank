@@ -7,6 +7,12 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.bangraja.smartwatertank.view.DashboardFragment;
+import com.bangraja.smartwatertank.view.LoginActivity;
+import com.bangraja.smartwatertank.view.NotificationFragment;
+import com.bangraja.smartwatertank.view.SettingsActivity;
+import com.bangraja.smartwatertank.view.AnalysisFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,17 +47,17 @@ public class MainActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_dashboard) {
-                selectedFragment = new DashboardActivity();
+                selectedFragment = new DashboardFragment();
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setTitle("Dashboard");
                 }
             } else if (id == R.id.nav_statistik) {
-                selectedFragment = new StatistikActivity();
+                selectedFragment = new AnalysisFragment();
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setTitle("Statistik");
                 }
             } else if (id == R.id.nav_notifikasi) {
-                selectedFragment = new NotificationActivity();
+                selectedFragment = new NotificationFragment();
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setTitle("Notifikasi");
                 }
