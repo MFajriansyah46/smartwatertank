@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.bangraja.smartwatertank.view.DashboardFragment;
 import com.bangraja.smartwatertank.view.LoginActivity;
 import com.bangraja.smartwatertank.view.NotificationFragment;
@@ -19,18 +20,18 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Main extends AppCompatActivity {
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Inisialisasi Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        Window window = getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bread));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bread));
 
         // Cek apakah user sudah login
-        if (mAuth.getCurrentUser() == null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(Main.this, LoginActivity.class));
             finish();
             return;
