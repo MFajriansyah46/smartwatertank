@@ -28,6 +28,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".controller.StatistikController">
+            <!-- aktivitas lainnya -->
+        </activity>
+
+
         <!-- MainActivity -->
         <activity
             android:name=".Main"
