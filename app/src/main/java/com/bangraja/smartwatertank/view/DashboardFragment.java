@@ -33,14 +33,8 @@ public class DashboardFragment extends Fragment {
         progressVolume = view.findViewById(R.id.progressVolume);
         progressPercent = view.findViewById(R.id.progressPercent);
 
-        float volume = 600f;
-        int percent = Math.min(100, Math.round((volume / 1200f) * 100));
-
-        progressVolume.setProgress(percent);
-        progressPercent.setText(String.valueOf(percent));
-
         dc = new DashboardController();
-        dc.setupTransmiterListener(pressure, height, waterVolume);
+        dc.setupTransmiterListener(pressure, height, waterVolume,progressVolume, progressPercent);
         dc.setupPerintahListener(bukaKeran);
 
         return view;

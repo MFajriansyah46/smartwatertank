@@ -1,5 +1,6 @@
 package com.bangraja.smartwatertank.controller;
 
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.bangraja.smartwatertank.model.DashboardModel;
@@ -10,11 +11,14 @@ import com.google.firebase.database.ValueEventListener;
 public class DashboardController {
     private final DashboardModel dm;
 
+    private Double heightValue, waterVolumeValue;
+    private Long pressureValue;
+
     public DashboardController() {
         dm = new DashboardModel();
     }
 
-    public void setupTransmiterListener(TextView pressure, TextView height, TextView waterVolume) {
+    public void setupTransmiterListener(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
         ValueEventListener transmiterListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -25,13 +29,17 @@ public class DashboardController {
                     return;
                 }
 
-                Double heightValue = snapshot.child("height").getValue(Double.class);
-                Long pressureValue = snapshot.child("pressure").getValue(Long.class);
-                Double waterVolumeValue = snapshot.child("water_volume").getValue(Double.class);
+                heightValue = snapshot.child("height").getValue(Double.class);
+                pressureValue = snapshot.child("pressure").getValue(Long.class);
+                waterVolumeValue = snapshot.child("water_volume").getValue(Double.class);
 
                 pressure.setText(pressureValue != null ? pressureValue.toString() : "N/A");
                 height.setText(heightValue != null ? String.format("%.2f", heightValue) : "N/A");
                 waterVolume.setText(waterVolumeValue != null ? String.format("%.2f", waterVolumeValue) : "N/A");
+
+                int percent = Math.min(100, (int) Math.round((waterVolumeValue / 1200.0) * 100));
+                progressVolume.setProgress(percent);
+                progressPercent.setText(String.valueOf(percent));
             }
 
             @Override
