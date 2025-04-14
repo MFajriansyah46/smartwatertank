@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bangraja.smartwatertank.Main;
 import com.bangraja.smartwatertank.R;
 
-public class SplashActivity extends AppCompatActivity {
+public class Splash extends AppCompatActivity {
     private static final int SPLASH_DURATION = 2000; // 2 detik
 
     @Override
@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
 
         // Lanjut ke LoginActivity setelah delay
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, Main.class));
+            startActivity(new Intent(Splash.this, Main.class));
             finish();
         }, SPLASH_DURATION);
     }
