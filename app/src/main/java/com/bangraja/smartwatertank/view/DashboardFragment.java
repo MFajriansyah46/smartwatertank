@@ -37,7 +37,7 @@ public class DashboardFragment extends Fragment {
         int percent = Math.min(100, Math.round((volume / 1200f) * 100));
 
         progressVolume.setProgress(percent);
-        progressPercent.setText(percent);
+        progressPercent.setText(String.valueOf(percent));
 
         dc = new DashboardController();
         dc.setupTransmiterListener(pressure, height, waterVolume);
