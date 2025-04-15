@@ -8,15 +8,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangraja.smartwatertank.Main;
-import com.bangraja.smartwatertank.model.AuthenticationModel;
+import com.bangraja.smartwatertank.model.AuthModel;
 import com.bangraja.smartwatertank.view.LoginActivity;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class AuthenticationController {
-    private final AuthenticationModel am;
+public class AuthController {
+    private final AuthModel am;
 
-    public AuthenticationController() {
-        am = new AuthenticationModel();
+    public AuthController() {
+        am = new AuthModel();
     }
 
     public void login(String email, String password, Activity activity, ProgressBar progressBar) {
@@ -26,8 +25,7 @@ public class AuthenticationController {
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        FirebaseAuth auth = am.getAuth();
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+        am.getAuth().signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             progressBar.setVisibility(View.GONE);
             if (task.isSuccessful()) {
                 Intent intent = new Intent(activity, Main.class);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -15,6 +16,9 @@ import com.bangraja.smartwatertank.controller.DashboardController;
 public class DashboardFragment extends Fragment {
     private TextView pressure, height, waterVolume;
     private Switch bukaKeran;
+    private ProgressBar progressVolume;
+    private TextView progressPercent;
+
     private DashboardController dc;
 
     @Nullable
@@ -26,6 +30,14 @@ public class DashboardFragment extends Fragment {
         height = view.findViewById(R.id.height);
         waterVolume = view.findViewById(R.id.water_volume);
         bukaKeran = view.findViewById(R.id.bukaKeran);
+        progressVolume = view.findViewById(R.id.progressVolume);
+        progressPercent = view.findViewById(R.id.progressPercent);
+
+        float volume = 600f;
+        int percent = Math.min(100, Math.round((volume / 1200f) * 100));
+
+        progressVolume.setProgress(percent);
+        progressPercent.setText(percent);
 
         dc = new DashboardController();
         dc.setupTransmiterListener(pressure, height, waterVolume);

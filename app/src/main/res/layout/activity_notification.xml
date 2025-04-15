@@ -20,15 +20,6 @@
             android:layout_marginTop="4dp"
             android:elevation="2dp">
 
-            <!-- Icon di kiri -->
-            <ImageView
-                android:id="@+id/ic_icon_notification"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="12dp"
-                android:src="@drawable/ic_notification_icon"
-                 android:contentDescription="@string/notification_icon" />
-
             <!-- Konten Notifikasi -->
             <LinearLayout
                 android:layout_width="0dp"
@@ -38,7 +29,7 @@
 
                 <!-- Email -->
                 <TextView
-                    android:id="@+id/id_email"
+                    android:id="@+id/email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="user@email.com"
@@ -48,10 +39,10 @@
 
                 <!-- Deskripsi -->
                 <TextView
-                    android:id="@+id/id_desc"
+                    android:id="@+id/desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Keterangan notifikasi di sini Keterangan notifikasi di sini Keterangan notifikasi di sini Keterangan notifikasi di sini"
+                    android:text="Keterangan notifikasi di sini"
                     android:textSize="14sp"
                     android:textColor="#E0E0E0"
                     android:layout_marginTop="2dp" />
@@ -64,7 +55,7 @@
                     android:layout_marginTop="4dp">
 
                     <TextView
-                        android:id="@+id/id_time"
+                        android:id="@+id/time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="14:30"
@@ -79,7 +70,7 @@
                         android:textColor="#E0E0E0" />
 
                     <TextView
-                        android:id="@+id/id_date"
+                        android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2025-04-07"

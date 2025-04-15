@@ -3,10 +3,10 @@ package com.bangraja.smartwatertank.model;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class AuthenticationModel {
+public class AuthModel {
     private final FirebaseAuth auth;
 
-    public AuthenticationModel() {
+    public AuthModel() {
         auth = FirebaseAuth.getInstance();
     }
 
