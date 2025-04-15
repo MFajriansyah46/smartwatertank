@@ -52,26 +52,7 @@ public class DashboardController {
         dm.addTransmiterListener(transmiterListener);
     }
 
-    public void setupPerintahListener(Switch bukaKeran) {
-        ValueEventListener perintahListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Boolean statusKeran = snapshot.child("keran").getValue(Boolean.class);
-                bukaKeran.setChecked(statusKeran != null && statusKeran);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Handle possible errors.
-            }
-        };
-        dm.addCommandListener(perintahListener);
-
-        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> dm.updateKeranStatus(isChecked));
-    }
-
     public void cleanup() {
         dm.removeTransmiterListener(null);
-        dm.removeCommandListener(null);
     }
 }

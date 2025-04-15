@@ -13,20 +13,16 @@ import com.google.firebase.database.*;
 
 public class CommandController {
     private final CommandModel cm;
-    private final FirebaseAuth auth;
 
     public CommandController() {
-        // Inisialisasi CommandModel dan FirebaseAuth
         cm = new CommandModel();
-        auth = FirebaseAuth.getInstance();
     }
 
     // Mengatur Switch untuk buka keran otomatis
     public void autoSwitch(Switch bukaKeranOtomatis, Activity activity) {
-        DatabaseReference getCommandRef = cm.getCommandRef();
 
         // Mendengarkan perubahan nilai "otomatis" di Firebase
-        getCommandRef.child("otomatis").addValueEventListener(new ValueEventListener() {
+        cm.getCommandRef().child("otomatis").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Boolean status = snapshot.getValue(Boolean.class);
@@ -41,15 +37,32 @@ public class CommandController {
 
         // Menangani perubahan status Switch oleh pengguna
         bukaKeranOtomatis.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            FirebaseUser currentUser = auth.getCurrentUser();
-            if (currentUser != null) {
-                String email = currentUser.getEmail();
-                getCommandRef.child("otomatis").setValue(isChecked);
-                getCommandRef.child("operator").setValue(email);
-                Toast.makeText(activity, "Status otomatis diperbarui", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(activity, "Pengguna tidak login", Toast.LENGTH_SHORT).show();
-            }
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            cm.getCommandRef().child("otomatis").setValue(isChecked);
+            cm.getCommandRef().child("operator").setValue(email);
+            Toast.makeText(activity, "Status otomatis diperbarui", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    public void setSwitch(Switch bukaKeran) {
+        ValueEventListener perintahListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Boolean statusKeran = snapshot.child("keran").getValue(Boolean.class);
+                bukaKeran.setChecked(statusKeran != null && statusKeran);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Handle possible errors.
+            }
+        };
+        cm.addCommandListener(perintahListener);
+
+        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> cm.updateKeranStatus(isChecked));
+    }
+
+    public void cleanup() {
+        cm.removeCommandListener(null);
     }
 }

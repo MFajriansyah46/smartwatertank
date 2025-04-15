@@ -21,16 +21,4 @@ public class DashboardModel {
     public void removeTransmiterListener(ValueEventListener listener) {
         transmiter.removeEventListener(listener);
     }
-
-    public void addCommandListener(ValueEventListener listener) {
-        perintah.addValueEventListener(listener);
-    }
-
-    public void removeCommandListener(ValueEventListener listener) {
-        perintah.removeEventListener(listener);
-    }
-
-    public void updateKeranStatus(boolean isChecked) {
-        perintah.child("keran").setValue(isChecked);
-    }
 }
