@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Smart Water Tank</string>
     <string name="notification_icon">Notification Icon</string>
+    <string-array name="filter_options">
+        <item>Hari ini</item>
+        <item>Bulan ini</item>
+        <item>Tahun ini</item>
+        <item>Semua</item>
+    </string-array>
 </resources>
