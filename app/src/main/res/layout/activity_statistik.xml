@@ -19,7 +19,7 @@
             android:layout_gravity="end"
             android:entries="@array/filter_options"
             android:layout_marginBottom="16dp"
-            android:textColor="@color/white" />
+            style="@style/WhiteSpinner" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"

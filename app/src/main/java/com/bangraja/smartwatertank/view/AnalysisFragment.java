@@ -1,31 +1,27 @@
 package com.bangraja.smartwatertank.view;
 
 import com.bangraja.smartwatertank.R;
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.ArrayList;
@@ -43,7 +39,13 @@ public class AnalysisFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_statistik, container, false);
 
         lineChart = view.findViewById(R.id.lineChart);
+        lineChart.setNoDataText("");
+
         filterSpinner = view.findViewById(R.id.filterSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(), R.array.filter_options, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        filterSpinner.setAdapter(adapter);
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -105,7 +107,6 @@ public class AnalysisFragment extends Fragment {
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         handleDataForChart(queryDocumentSnapshots.getDocuments());
                     });
-            filterSpinner.setSelection(1);
         } else {
             ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
                 handleDataForChart(queryDocumentSnapshots.getDocuments());
@@ -154,6 +155,7 @@ public class AnalysisFragment extends Fragment {
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(labels.size());
         xAxis.setTextColor(Color.WHITE);
+        xAxis.setDrawGridLines(false);
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -164,15 +166,10 @@ public class AnalysisFragment extends Fragment {
 
         lineChart.getLegend().setTextColor(Color.WHITE);
         lineChart.getAxisLeft().setTextColor(Color.WHITE);
+        lineChart.getAxisLeft().setDrawGridLines(false);
         lineChart.getAxisRight().setEnabled(false);
         lineChart.setBackgroundColor(Color.TRANSPARENT);
         lineChart.setDrawGridBackground(false);
-
-        Description desc = new Description();
-        desc.setText("Volume Air per 15 Menit");
-        desc.setTextColor(Color.WHITE);
-        desc.setTextSize(12f);
-        lineChart.setDescription(desc);
         lineChart.invalidate();
     }
 }

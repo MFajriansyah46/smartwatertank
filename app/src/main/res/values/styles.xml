@@ -1,0 +1,7 @@
+<resources>
+    <style name="WhiteSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:backgroundTint">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:popupBackground">@android:color/black</item> <!-- optional, biar popup-nya gelap -->
+    </style>
+</resources>
