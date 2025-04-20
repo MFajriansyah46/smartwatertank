@@ -13,7 +13,7 @@ import com.bangraja.smartwatertank.view.DashboardFragment;
 import com.bangraja.smartwatertank.view.LoginActivity;
 import com.bangraja.smartwatertank.view.NotificationFragment;
 import com.bangraja.smartwatertank.view.SettingsActivity;
-import com.bangraja.smartwatertank.view.AnalysisFragment;
+import com.bangraja.smartwatertank.view.StatisticsAndHistoryFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -53,7 +53,7 @@ public class Main extends AppCompatActivity {
                     getSupportActionBar().setTitle("Dashboard");
                 }
             } else if (id == R.id.nav_statistik) {
-                selectedFragment = new AnalysisFragment();
+                selectedFragment = new StatisticsAndHistoryFragment();
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setTitle("Statistik");
                 }

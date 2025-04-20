@@ -17,8 +17,4 @@ public class AuthModel {
     public FirebaseUser getCurrentUser() {
         return auth.getCurrentUser();
     }
-
-    public void destroy() {
-        auth = null;
-    }
 }

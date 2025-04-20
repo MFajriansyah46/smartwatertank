@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.bangraja.smartwatertank.view.custom.CustomMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
@@ -35,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import android.content.Context;
 
-public class AnalysisFragment extends Fragment {
+public class StatisticsAndHistoryFragment extends Fragment {
 
     private LineChart lineChart;
     Spinner filterSpinner;
@@ -189,36 +191,5 @@ public class AnalysisFragment extends Fragment {
         lineChart.setMarker(marker);
 
         lineChart.invalidate();
-    }
-}
-
-class CustomMarkerView extends MarkerView {
-
-    private final TextView markerText;
-    private final List<DocumentSnapshot> documents;
-
-    public CustomMarkerView(Context context, List<DocumentSnapshot> documents) {
-        super(context, R.layout.custom_marker_view);
-        this.documents = documents;
-        markerText = findViewById(R.id.markerText);
-    }
-
-    @Override
-    public void refreshContent(Entry e, Highlight highlight) {
-        int index = (int) e.getX();
-        if (index >= 0 && index < documents.size()) {
-            DocumentSnapshot doc = documents.get(index);
-            Date date = doc.getTimestamp("timestamp").toDate();
-
-            String formatted = new SimpleDateFormat("HH.mm dd MMM yyyy", Locale.getDefault()).format(date);
-            markerText.setText(formatted);
-        }
-
-        super.refreshContent(e, highlight);
-    }
-
-    @Override
-    public MPPointF getOffset() {
-        return new MPPointF(-(getWidth() / 2f), -getHeight());
     }
 }

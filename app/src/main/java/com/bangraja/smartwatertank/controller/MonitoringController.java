@@ -1,24 +1,23 @@
 package com.bangraja.smartwatertank.controller;
 
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
-import com.bangraja.smartwatertank.model.DashboardModel;
+import com.bangraja.smartwatertank.model.TransmiterModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-public class DashboardController {
-    private final DashboardModel dm;
+public class MonitoringController {
+    private final TransmiterModel tm;
 
     private Double heightValue, waterVolumeValue;
     private Long pressureValue;
 
-    public DashboardController() {
-        dm = new DashboardModel();
+    public MonitoringController() {
+        tm = new TransmiterModel();
     }
 
-    public void setupTransmiterListener(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
+    public void RealtimeData(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
         ValueEventListener transmiterListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -49,10 +48,18 @@ public class DashboardController {
                 waterVolume.setText("Error loading data");
             }
         };
-        dm.addTransmiterListener(transmiterListener);
+        tm.addTransmiterListener(transmiterListener);
+    }
+
+    public void StatisticData() {
+
+    }
+
+    public void HistoryData() {
+
     }
 
     public void cleanup() {
-        dm.removeTransmiterListener(null);
+        tm.removeTransmiterListener(null);
     }
 }
