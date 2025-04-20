@@ -9,15 +9,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.utils.MPPointF;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +32,8 @@ import java.util.Calendar;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import android.content.Context;
 
 public class AnalysisFragment extends Fragment {
 
@@ -105,15 +112,15 @@ public class AnalysisFragment extends Fragment {
             ref.whereGreaterThanOrEqualTo("timestamp", startDate)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        handleDataForChart(queryDocumentSnapshots.getDocuments());
+                        handleDataForChart(queryDocumentSnapshots.getDocuments(), filter);
                     });
         } else {
             ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
-                handleDataForChart(queryDocumentSnapshots.getDocuments());
+                handleDataForChart(queryDocumentSnapshots.getDocuments(), filter);
             });
         }
     }
-    private void handleDataForChart(List<DocumentSnapshot> documents) {
+    private void handleDataForChart(List<DocumentSnapshot> documents, String filter) {
         List<Entry> entries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
@@ -123,7 +130,12 @@ public class AnalysisFragment extends Fragment {
             return date1.compareTo(date2);
         });
 
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf;
+        if (filter.equals("Hari ini")) {
+            sdf = new SimpleDateFormat("HH:mm");
+        } else {
+            sdf = new SimpleDateFormat(""); // kosongkan label X untuk filter lain
+        }
 
         for (int i = 0; i < documents.size(); i++) {
             DocumentSnapshot doc = documents.get(i);
@@ -135,9 +147,10 @@ public class AnalysisFragment extends Fragment {
                 labels.add(sdf.format(date));
             }
         }
-        renderChart((ArrayList<Entry>) entries, (ArrayList<String>) labels);
+
+        renderChart((ArrayList<Entry>) entries, (ArrayList<String>) labels, documents);
     }
-    private void renderChart(ArrayList<Entry> entries, ArrayList<String> labels) {
+    private void renderChart(ArrayList<Entry> entries, ArrayList<String> labels, List<DocumentSnapshot> documents) {
         LineDataSet dataSet = new LineDataSet(entries, "Volume Air (L)");
         dataSet.setColor(Color.CYAN);
         dataSet.setCircleColor(Color.WHITE);
@@ -170,6 +183,42 @@ public class AnalysisFragment extends Fragment {
         lineChart.getAxisRight().setEnabled(false);
         lineChart.setBackgroundColor(Color.TRANSPARENT);
         lineChart.setDrawGridBackground(false);
+
+        CustomMarkerView marker = new CustomMarkerView(requireContext(), documents);
+        marker.setChartView(lineChart);
+        lineChart.setMarker(marker);
+
         lineChart.invalidate();
+    }
+}
+
+class CustomMarkerView extends MarkerView {
+
+    private final TextView markerText;
+    private final List<DocumentSnapshot> documents;
+
+    public CustomMarkerView(Context context, List<DocumentSnapshot> documents) {
+        super(context, R.layout.custom_marker_view);
+        this.documents = documents;
+        markerText = findViewById(R.id.markerText);
+    }
+
+    @Override
+    public void refreshContent(Entry e, Highlight highlight) {
+        int index = (int) e.getX();
+        if (index >= 0 && index < documents.size()) {
+            DocumentSnapshot doc = documents.get(index);
+            Date date = doc.getTimestamp("timestamp").toDate();
+
+            String formatted = new SimpleDateFormat("HH.mm dd MMM yyyy", Locale.getDefault()).format(date);
+            markerText.setText(formatted);
+        }
+
+        super.refreshContent(e, highlight);
+    }
+
+    @Override
+    public MPPointF getOffset() {
+        return new MPPointF(-(getWidth() / 2f), -getHeight());
     }
 }
