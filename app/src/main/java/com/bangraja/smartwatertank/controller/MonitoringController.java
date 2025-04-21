@@ -10,14 +10,14 @@ import com.google.firebase.database.ValueEventListener;
 public class MonitoringController {
     private final TransmiterModel tm;
 
-    private Double heightValue, waterVolumeValue;
+    private Double heightValue, waterVolumeValue, maxVolumeValue;
     private Long pressureValue;
 
     public MonitoringController() {
         tm = new TransmiterModel();
     }
 
-    public void RealtimeData(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
+    public void realtimeData(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
         ValueEventListener transmiterListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -31,12 +31,13 @@ public class MonitoringController {
                 heightValue = snapshot.child("height").getValue(Double.class);
                 pressureValue = snapshot.child("pressure").getValue(Long.class);
                 waterVolumeValue = snapshot.child("water_volume").getValue(Double.class);
+                maxVolumeValue = snapshot.child("max_volume").getValue(Double.class);
 
                 pressure.setText(pressureValue != null ? pressureValue.toString() : "N/A");
                 height.setText(heightValue != null ? String.format("%.2f", heightValue) : "N/A");
                 waterVolume.setText(waterVolumeValue != null ? String.format("%.2f", waterVolumeValue) : "N/A");
 
-                int percent = Math.min(100, (int) Math.round((waterVolumeValue / 1200.0) * 100));
+                int percent = Math.min(100, (int) Math.round((waterVolumeValue / maxVolumeValue) * 100));
                 progressVolume.setProgress(percent);
                 progressPercent.setText(String.valueOf(percent));
             }
@@ -51,11 +52,11 @@ public class MonitoringController {
         tm.addTransmiterListener(transmiterListener);
     }
 
-    public void StatisticData() {
+    public void statisticData() {
 
     }
 
-    public void HistoryData() {
+    public void historyData() {
 
     }
 
