@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -16,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bangraja.smartwatertank.controller.MonitoringController;
 import com.bangraja.smartwatertank.view.custom.CustomMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.MarkerView;
@@ -109,17 +109,18 @@ public class StatisticsAndHistoryFragment extends Fragment {
             case "Semua":
                 startDate = null; // ambil semua
                 break;
+
         }
 
         if (startDate != null) {
             ref.whereGreaterThanOrEqualTo("timestamp", startDate)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        handleDataForChart(queryDocumentSnapshots.getDocuments(), filter);
+                        handleDataForChart15Menit(queryDocumentSnapshots.getDocuments(), filter); // <-- ini
                     });
         } else {
             ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
-                handleDataForChart(queryDocumentSnapshots.getDocuments(), filter);
+                handleDataForChart15Menit(queryDocumentSnapshots.getDocuments(), filter); // <-- ini
             });
         }
     }
@@ -152,7 +153,17 @@ public class StatisticsAndHistoryFragment extends Fragment {
         }
 
         renderChart((ArrayList<Entry>) entries, (ArrayList<String>) labels, documents);
+
     }
+
+    private void handleDataForChart15Menit(List<DocumentSnapshot> documents, String filter) {
+        MonitoringController controller = new MonitoringController();
+        List<String> labels = new ArrayList<>();
+        List<Entry> entries = controller.statisticData(documents, filter, labels);
+
+        renderChart((ArrayList<Entry>) entries, (ArrayList<String>) labels, documents);
+    }
+
     private void renderChart(ArrayList<Entry> entries, ArrayList<String> labels, List<DocumentSnapshot> documents) {
         LineDataSet dataSet = new LineDataSet(entries, "Volume Air (L)");
         dataSet.setColor(Color.CYAN);
@@ -193,52 +204,6 @@ public class StatisticsAndHistoryFragment extends Fragment {
 
         lineChart.invalidate();
 
-//        HISTORY
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        LinearLayout historyContainer = requireView().findViewById(R.id.historyContainer);
-        historyContainer.removeAllViews();
-
-        double max_volume = 1200.0;
-
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Collections.sort(documents, (d1, d2) -> {
-            Date t1 = d1.getTimestamp("timestamp").toDate();
-            Date t2 = d2.getTimestamp("timestamp").toDate();
-            return t2.compareTo(t1); // Descending
-        });
-
-        for (DocumentSnapshot doc : documents) {
-            // looping dan tampilkan data
-        }
-
-        for (DocumentSnapshot doc : documents) {
-            Double height = doc.getDouble("height");
-            Double pressure = doc.getDouble("pressure");
-            Double volume = doc.getDouble("water_volume");
-            Date timestamp = doc.getTimestamp("timestamp") != null ? doc.getTimestamp("timestamp").toDate() : null;
-
-            if (volume != null && height != null && pressure != null && timestamp != null) {
-                View itemView = inflater.inflate(R.layout.item_history, historyContainer, false);
-
-                TextView timestampText = itemView.findViewById(R.id.textViewTimestamp);
-                TextView volumeText = itemView.findViewById(R.id.water_volume);
-                TextView heightText = itemView.findViewById(R.id.height);
-                TextView pressureText = itemView.findViewById(R.id.pressure);
-                TextView progressPercentText = itemView.findViewById(R.id.progressPercent);
-
-                timestampText.setText(dateFormat.format(timestamp) + " " + timeFormat.format(timestamp));
-                volumeText.setText(String.format(Locale.getDefault(), "%.2f", volume));
-                heightText.setText(String.format(Locale.getDefault(), "%.2f", height));
-                pressureText.setText(String.format(Locale.getDefault(), "%.2f", pressure));
-
-                // Kalau kamu hitung progress/prosentase air:
-                double percentage = (volume / max_volume) * 100;
-                progressPercentText.setText(String.format(Locale.getDefault(), "%.1f", percentage));
-
-                historyContainer.addView(itemView);
-            }
-        }
-
     }
 }
+

@@ -2,10 +2,19 @@ package com.bangraja.smartwatertank.controller;
 
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Collections;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.github.mikephil.charting.data.Entry;
 import com.bangraja.smartwatertank.model.TransmiterModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
 
 public class MonitoringController {
     private final TransmiterModel tm;
@@ -52,8 +61,58 @@ public class MonitoringController {
         tm.addTransmiterListener(transmiterListener);
     }
 
-    public void statisticData() {
+    public List<Entry> statisticData(List<DocumentSnapshot> documents, String filter, List<String> labels) {
+        List<Entry> entries = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
+        Collections.sort(documents, (d1, d2) -> d1.getTimestamp("timestamp").toDate().compareTo(d2.getTimestamp("timestamp").toDate()));
+
+        // Variabel untuk pengelompokkan data setiap 15 menit
+        long intervalMillis = 15 * 60 * 1000; // 15 menit
+        long startTime = -1;
+        int count = 0;
+        float totalVolume = 0;
+
+        for (int i = 0; i < documents.size(); i++) {
+            DocumentSnapshot doc = documents.get(i);
+            Double volume = doc.getDouble("water_volume");
+            Date date = doc.getTimestamp("timestamp").toDate();
+
+            if (volume != null && date != null) {
+                long currentTime = date.getTime();
+
+                // Jika belum ada data, set waktu mulai
+                if (startTime == -1) {
+                    startTime = currentTime;
+                }
+
+                // Periksa apakah data sudah melewati periode 15 menit
+                if ((currentTime - startTime) >= 15 * 60 * 1000) {
+                    // Tambahkan entry untuk periode yang sudah selesai
+                    if (count > 0) {
+                        entries.add(new Entry(entries.size(), totalVolume / count));
+                        labels.add(sdf.format(new Date(startTime)));
+                    }
+
+                    // Reset penghitungan untuk periode berikutnya
+                    startTime = currentTime;
+                    count = 0;
+                    totalVolume = 0;
+                }
+
+                // Tambahkan volume ke total volume dalam periode tersebut
+                totalVolume += volume.floatValue();
+                count++;
+            }
+        }
+
+        // Jika masih ada data yang belum terkelompokkan (misalnya terakhir)
+        if (count > 0) {
+            entries.add(new Entry(entries.size(), totalVolume / count));
+            labels.add(sdf.format(new Date(startTime)));
+        }
+
+        return entries;
     }
 
     public void historyData() {
