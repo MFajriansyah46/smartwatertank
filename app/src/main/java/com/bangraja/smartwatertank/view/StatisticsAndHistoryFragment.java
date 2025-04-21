@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bangraja.smartwatertank.controller.MonitoringController;
 import com.bangraja.smartwatertank.view.custom.CustomMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.MarkerView;
@@ -108,17 +109,18 @@ public class StatisticsAndHistoryFragment extends Fragment {
             case "Semua":
                 startDate = null; // ambil semua
                 break;
+
         }
 
         if (startDate != null) {
             ref.whereGreaterThanOrEqualTo("timestamp", startDate)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        handleDataForChart(queryDocumentSnapshots.getDocuments(), filter);
+                        handleDataForChart15Menit(queryDocumentSnapshots.getDocuments(), filter); // <-- ini
                     });
         } else {
             ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
-                handleDataForChart(queryDocumentSnapshots.getDocuments(), filter);
+                handleDataForChart15Menit(queryDocumentSnapshots.getDocuments(), filter); // <-- ini
             });
         }
     }
@@ -151,7 +153,17 @@ public class StatisticsAndHistoryFragment extends Fragment {
         }
 
         renderChart((ArrayList<Entry>) entries, (ArrayList<String>) labels, documents);
+
     }
+
+    private void handleDataForChart15Menit(List<DocumentSnapshot> documents, String filter) {
+        MonitoringController controller = new MonitoringController();
+        List<String> labels = new ArrayList<>();
+        List<Entry> entries = controller.statisticData(documents, filter, labels);
+
+        renderChart((ArrayList<Entry>) entries, (ArrayList<String>) labels, documents);
+    }
+
     private void renderChart(ArrayList<Entry> entries, ArrayList<String> labels, List<DocumentSnapshot> documents) {
         LineDataSet dataSet = new LineDataSet(entries, "Volume Air (L)");
         dataSet.setColor(Color.CYAN);
@@ -191,5 +203,7 @@ public class StatisticsAndHistoryFragment extends Fragment {
         lineChart.setMarker(marker);
 
         lineChart.invalidate();
+
     }
 }
+

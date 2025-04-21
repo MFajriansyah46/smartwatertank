@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment {
         dc = new MonitoringController();
         cc = new CommandController();
 
-        dc.RealtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
+        dc.realtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
         cc.manualSwitch(bukaKeran);
 
         return view;
