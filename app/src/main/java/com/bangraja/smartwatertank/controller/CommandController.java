@@ -45,6 +45,8 @@ public class CommandController {
     }
 
     public void manualSwitch(Switch bukaKeran) {
+        NotificationController nc = new NotificationController();
+
         ValueEventListener perintahListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -53,14 +55,22 @@ public class CommandController {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Handle possible errors.
-            }
+            public void onCancelled(DatabaseError error) { }
         };
         cm.addCommandListener(perintahListener);
 
-        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> cm.updateKeranStatus(isChecked));
+        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            cm.updateKeranStatus(isChecked);
+
+            // Kirim notifikasi
+            if (isChecked) {
+                nc.sendNotification("Keran dibuka");
+            } else {
+                nc.sendNotification("Keran ditutup");
+            }
+        });
     }
+
 
     public void cleanup() {
         cm.removeCommandListener(null);
