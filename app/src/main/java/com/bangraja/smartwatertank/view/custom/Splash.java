@@ -1,4 +1,4 @@
-package com.bangraja.smartwatertank.view;
+package com.bangraja.smartwatertank.view.custom;
 
 import android.content.Intent;
 import android.os.Bundle;

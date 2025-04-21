@@ -1,24 +1,23 @@
 package com.bangraja.smartwatertank.controller;
 
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
-import com.bangraja.smartwatertank.model.DashboardModel;
+import com.bangraja.smartwatertank.model.TransmiterModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-public class DashboardController {
-    private final DashboardModel dm;
+public class MonitoringController {
+    private final TransmiterModel tm;
 
-    private Double heightValue, waterVolumeValue;
+    private Double heightValue, waterVolumeValue, maxVolumeValue;
     private Long pressureValue;
 
-    public DashboardController() {
-        dm = new DashboardModel();
+    public MonitoringController() {
+        tm = new TransmiterModel();
     }
 
-    public void setupTransmiterListener(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
+    public void realtimeData(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
         ValueEventListener transmiterListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -32,12 +31,13 @@ public class DashboardController {
                 heightValue = snapshot.child("height").getValue(Double.class);
                 pressureValue = snapshot.child("pressure").getValue(Long.class);
                 waterVolumeValue = snapshot.child("water_volume").getValue(Double.class);
+                maxVolumeValue = snapshot.child("max_volume").getValue(Double.class);
 
                 pressure.setText(pressureValue != null ? pressureValue.toString() : "N/A");
                 height.setText(heightValue != null ? String.format("%.2f", heightValue) : "N/A");
                 waterVolume.setText(waterVolumeValue != null ? String.format("%.2f", waterVolumeValue) : "N/A");
 
-                int percent = Math.min(100, (int) Math.round((waterVolumeValue / 1200.0) * 100));
+                int percent = Math.min(100, (int) Math.round((waterVolumeValue / maxVolumeValue) * 100));
                 progressVolume.setProgress(percent);
                 progressPercent.setText(String.valueOf(percent));
             }
@@ -49,10 +49,18 @@ public class DashboardController {
                 waterVolume.setText("Error loading data");
             }
         };
-        dm.addTransmiterListener(transmiterListener);
+        tm.addTransmiterListener(transmiterListener);
+    }
+
+    public void statisticData() {
+
+    }
+
+    public void historyData() {
+
     }
 
     public void cleanup() {
-        dm.removeTransmiterListener(null);
+        tm.removeTransmiterListener(null);
     }
 }

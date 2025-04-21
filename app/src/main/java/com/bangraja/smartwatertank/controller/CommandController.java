@@ -44,7 +44,7 @@ public class CommandController {
         });
     }
 
-    public void setSwitch(Switch bukaKeran) {
+    public void manualSwitch(Switch bukaKeran) {
         ValueEventListener perintahListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {

@@ -20,18 +20,13 @@
 
         <!-- SplashActivity sebagai launcher -->
         <activity
-            android:name=".view.Splash"
+            android:name=".view.custom.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".controller.StatistikController">
-            <!-- aktivitas lainnya -->
-        </activity>
-
 
         <!-- MainActivity -->
         <activity
