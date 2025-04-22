@@ -5,16 +5,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class UkuranModel {
 
-    private final FirebaseDatabase fb;
     private final DatabaseReference um;
 
     public UkuranModel() {
 
-        fb = FirebaseDatabase.getInstance();
-        um = fb.getReference("tb_ukuran");
+        um = FirebaseDatabase.getInstance().getReference("tb_ukuran");
     }
 
-    public DatabaseReference getRef() {
+    public DatabaseReference getUkuranRef() {
         return um;
     }
 

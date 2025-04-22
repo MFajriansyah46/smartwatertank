@@ -45,12 +45,11 @@ public class AuthController {
     }
 
     // Metode untuk menampilkan email pengguna pada TextView
-    public void displayUserEmail(TextView emailTextView) {
+    public void displayUserEmail(TextView email) {
         if (am.getCurrentUser() != null) {
-            String email = am.getCurrentUser().getEmail();
-            emailTextView.setText(email);
+            email.setText(am.getCurrentUser().getEmail());
         } else {
-            emailTextView.setText("Tidak ada akun login");
+            email.setText("Anonim");
         }
     }
 }

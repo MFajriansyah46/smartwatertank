@@ -15,18 +15,16 @@ import com.bangraja.smartwatertank.controller.CommandController;
 import com.bangraja.smartwatertank.controller.MonitoringController;
 
 public class DashboardFragment extends Fragment {
-    private TextView pressure, height, waterVolume;
+    private TextView pressure, height, waterVolume, progressPercent;
     private Switch bukaKeran;
     private ProgressBar progressVolume;
-    private TextView progressPercent;
 
-    private MonitoringController dc;
-    private CommandController cc;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_dashboard, container, false);
+        view = inflater.inflate(R.layout.activity_dashboard, container, false);
 
         pressure = view.findViewById(R.id.pressure);
         height = view.findViewById(R.id.height);
@@ -35,11 +33,8 @@ public class DashboardFragment extends Fragment {
         progressVolume = view.findViewById(R.id.progressVolume);
         progressPercent = view.findViewById(R.id.progressPercent);
 
-        dc = new MonitoringController();
-        cc = new CommandController();
-
-        dc.realtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
-        cc.manualSwitch(bukaKeran);
+        new MonitoringController().realtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
+        new CommandController().manualSwitch(bukaKeran);
 
         return view;
     }

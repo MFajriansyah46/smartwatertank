@@ -6,21 +6,20 @@ import com.google.firebase.database.ValueEventListener;
 
 public class TransmiterModel {
 
-    private final DatabaseReference tm;
+    private final DatabaseReference transmiterRef;
     public TransmiterModel() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        tm = database.getReference("transmiter");
+        transmiterRef = FirebaseDatabase.getInstance().getReference("transmiter");
     }
 
-    public DatabaseReference getRef() {
-        return tm;
+    public DatabaseReference getTransmiterRef() {
+        return transmiterRef;
     }
 
     public void addTransmiterListener(ValueEventListener listener) {
-        tm.addValueEventListener(listener);
+        transmiterRef.addValueEventListener(listener);
     }
 
     public void removeTransmiterListener(ValueEventListener listener) {
-        tm.removeEventListener(listener);
+        transmiterRef.removeEventListener(listener);
     }
 }
