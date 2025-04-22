@@ -9,7 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MonitoringController {
     private final TransmiterModel tm;
-
+    private ValueEventListener transmiterListener;
     private Double heightValue, waterVolumeValue, maxVolumeValue;
     private Long pressureValue;
 
@@ -18,7 +18,7 @@ public class MonitoringController {
     }
 
     public void realtimeData(TextView pressure, TextView height, TextView waterVolume,ProgressBar progressVolume, TextView progressPercent) {
-        ValueEventListener transmiterListener = new ValueEventListener() {
+        transmiterListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (!snapshot.exists()) {

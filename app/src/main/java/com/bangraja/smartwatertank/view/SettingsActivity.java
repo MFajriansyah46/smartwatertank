@@ -15,23 +15,18 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView emailTextView;
     private Switch bukaKeranOtomatis;
     private Button logoutBtn;
-    private AuthController ac;
-    private CommandController cc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        ac = new AuthController();
-        cc = new CommandController();
-
         emailTextView = findViewById(R.id.emailView);
         bukaKeranOtomatis = findViewById(R.id.bukaKeranOtomatis);
         logoutBtn = findViewById(R.id.logoutBtn);
 
-        ac.displayUserEmail(emailTextView);
-        cc.autoSwitch(bukaKeranOtomatis, this);
-        logoutBtn.setOnClickListener(view -> ac.logout(SettingsActivity.this));
+        new AuthController().displayUserEmail(emailTextView);
+        new CommandController().autoSwitch(bukaKeranOtomatis);
+        logoutBtn.setOnClickListener(view -> new AuthController().logout(SettingsActivity.this));
     }
 }

@@ -19,7 +19,7 @@ public class CommandController {
     }
 
     // Mengatur Switch untuk buka keran otomatis
-    public void autoSwitch(Switch bukaKeranOtomatis, Activity activity) {
+    public void autoSwitch(Switch bukaKeranOtomatis) {
 
         // Mendengarkan perubahan nilai "otomatis" di Firebase
         cm.getCommandRef().child("otomatis").addValueEventListener(new ValueEventListener() {
@@ -40,7 +40,6 @@ public class CommandController {
             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             cm.getCommandRef().child("otomatis").setValue(isChecked);
             cm.getCommandRef().child("operator").setValue(email);
-            Toast.makeText(activity, "Status otomatis diperbarui", Toast.LENGTH_SHORT).show();
         });
     }
 
