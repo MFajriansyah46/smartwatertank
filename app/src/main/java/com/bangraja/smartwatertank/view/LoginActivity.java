@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bangraja.smartwatertank.R;
 import com.bangraja.smartwatertank.controller.AuthController;
+import com.bangraja.smartwatertank.model.AuthModel;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(view -> {
             String userEmail = email.getText().toString();
             String userPassword = password.getText().toString();
-            new AuthController().login(userEmail, userPassword, LoginActivity.this, progressBar);
+            new AuthController(new AuthModel()).login(userEmail, userPassword, LoginActivity.this, progressBar);
         });
 
         exitBtn.setOnClickListener(view -> finishAffinity());

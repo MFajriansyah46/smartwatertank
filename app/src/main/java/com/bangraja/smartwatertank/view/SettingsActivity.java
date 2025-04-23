@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bangraja.smartwatertank.R;
 import com.bangraja.smartwatertank.controller.AuthController;
 import com.bangraja.smartwatertank.controller.CommandController;
+import com.bangraja.smartwatertank.model.AuthModel;
+import com.bangraja.smartwatertank.model.CommandModel;
 
 public class SettingsActivity extends AppCompatActivity {
     private TextView emailTextView;
@@ -25,8 +27,8 @@ public class SettingsActivity extends AppCompatActivity {
         bukaKeranOtomatis = findViewById(R.id.bukaKeranOtomatis);
         logoutBtn = findViewById(R.id.logoutBtn);
 
-        new AuthController().displayUserEmail(emailTextView);
-        new CommandController().autoSwitch(bukaKeranOtomatis);
-        logoutBtn.setOnClickListener(view -> new AuthController().logout(SettingsActivity.this));
+        new AuthController(new AuthModel()).displayUserEmail(emailTextView);
+        new CommandController(new CommandModel()).autoSwitch(bukaKeranOtomatis);
+        logoutBtn.setOnClickListener(view -> new AuthController(new AuthModel()).logout(SettingsActivity.this));
     }
 }

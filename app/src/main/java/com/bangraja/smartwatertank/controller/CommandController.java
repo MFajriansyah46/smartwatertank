@@ -14,8 +14,8 @@ import com.google.firebase.database.*;
 public class CommandController {
     private final CommandModel cm;
 
-    public CommandController() {
-        cm = new CommandModel();
+    public CommandController(CommandModel cm) {
+        this.cm = cm;
     }
 
     // Mengatur Switch untuk buka keran otomatis
