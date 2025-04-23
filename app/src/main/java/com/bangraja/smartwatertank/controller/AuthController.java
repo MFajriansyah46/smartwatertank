@@ -14,8 +14,8 @@ import com.bangraja.smartwatertank.view.LoginActivity;
 public class AuthController {
     private final AuthModel am;
 
-    public AuthController() {
-        am = new AuthModel();
+    public AuthController(AuthModel am) {
+        this.am = am;
     }
 
     public void login(String email, String password, Activity activity, ProgressBar progressBar) {

@@ -1,18 +1,18 @@
 package com.bangraja.smartwatertank.model;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UkuranModel {
 
-    private final DatabaseReference um;
+    private final CollectionReference um;
 
     public UkuranModel() {
 
-        um = FirebaseDatabase.getInstance().getReference("tb_ukuran");
+        um = FirebaseFirestore.getInstance().collection("tb_ukuran");
     }
 
-    public DatabaseReference getUkuranRef() {
+    public CollectionReference getUkuranRef() {
         return um;
     }
 

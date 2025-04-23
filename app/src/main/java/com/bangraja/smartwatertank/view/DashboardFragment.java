@@ -12,13 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.bangraja.smartwatertank.R;
 import com.bangraja.smartwatertank.controller.CommandController;
+import com.bangraja.smartwatertank.controller.DashboardController;
 import com.bangraja.smartwatertank.controller.MonitoringController;
+import com.bangraja.smartwatertank.model.CommandModel;
+import com.bangraja.smartwatertank.model.TransmiterModel;
 
 public class DashboardFragment extends Fragment {
     private TextView pressure, height, waterVolume, progressPercent;
     private Switch bukaKeran;
     private ProgressBar progressVolume;
-
     private View view;
 
     @Nullable
@@ -33,8 +35,8 @@ public class DashboardFragment extends Fragment {
         progressVolume = view.findViewById(R.id.progressVolume);
         progressPercent = view.findViewById(R.id.progressPercent);
 
-        new MonitoringController().realtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
-        new CommandController().manualSwitch(bukaKeran);
+        new DashboardController(new TransmiterModel()).realtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
+        new CommandController(new CommandModel()).manualSwitch(bukaKeran);
 
         return view;
     }
