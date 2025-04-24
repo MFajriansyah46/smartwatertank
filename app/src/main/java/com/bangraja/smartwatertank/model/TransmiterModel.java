@@ -15,10 +15,6 @@ public class TransmiterModel {
         return transmiterRef;
     }
 
-    public void addTransmiterListener(ValueEventListener listener) {
-        transmiterRef.addValueEventListener(listener);
-    }
-
     public void removeTransmiterListener(ValueEventListener listener) {
         transmiterRef.removeEventListener(listener);
     }
