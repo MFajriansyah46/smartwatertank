@@ -1,11 +1,13 @@
 package com.bangraja.smartwatertank.view;
 
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bangraja.smartwatertank.R;
 import com.bangraja.smartwatertank.controller.AuthController;
@@ -20,6 +22,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Window window = getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bread));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bread));
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);

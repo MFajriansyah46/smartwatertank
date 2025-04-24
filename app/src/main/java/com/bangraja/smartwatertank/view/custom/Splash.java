@@ -3,9 +3,11 @@ package com.bangraja.smartwatertank.view.custom;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bangraja.smartwatertank.Main;
 import com.bangraja.smartwatertank.R;
@@ -17,6 +19,10 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        Window window = getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bread));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bread));
 
         ImageView splashIcon = findViewById(R.id.splash_icon);
         ProgressBar loadingBar = findViewById(R.id.loading_bar);
