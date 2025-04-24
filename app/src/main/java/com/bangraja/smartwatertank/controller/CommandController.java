@@ -14,6 +14,8 @@ import com.google.firebase.database.*;
 public class CommandController {
     private final CommandModel cm;
 
+    ValueEventListener Listener;
+
     public CommandController(CommandModel cm) {
         this.cm = cm;
     }
@@ -44,7 +46,7 @@ public class CommandController {
     }
 
     public void manualSwitch(Switch bukaKeran) {
-        ValueEventListener perintahListener = new ValueEventListener() {
+        Listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Boolean statusKeran = snapshot.child("keran").getValue(Boolean.class);
@@ -56,12 +58,8 @@ public class CommandController {
                 // Handle possible errors.
             }
         };
-        cm.addCommandListener(perintahListener);
+        cm.getCommandRef().addValueEventListener(Listener);
 
-        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> cm.updateKeranStatus(isChecked));
-    }
-
-    public void cleanup() {
-        cm.removeCommandListener(null);
+        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> cm.getCommandRef().child("keran").setValue(isChecked));
     }
 }
