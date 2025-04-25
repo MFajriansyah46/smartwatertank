@@ -17,4 +17,5 @@ public class UkuranModel {
     public DatabaseReference getRef() {
         return um;
     }
+
 }
