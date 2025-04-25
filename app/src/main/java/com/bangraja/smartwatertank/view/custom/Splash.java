@@ -21,8 +21,8 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         Window window = getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bread));
-        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bread));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.meat));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.meat));
 
         ImageView splashIcon = findViewById(R.id.splash_icon);
         ProgressBar loadingBar = findViewById(R.id.loading_bar);

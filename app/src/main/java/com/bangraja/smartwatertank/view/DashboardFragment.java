@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -21,7 +24,7 @@ public class DashboardFragment extends Fragment {
     private TextView pressure, height, waterVolume, progressPercent;
     private Switch bukaKeran;
     private ProgressBar progressVolume;
-    private View view;
+    private View view, riverEffect;
 
     @Nullable
     @Override
@@ -31,12 +34,13 @@ public class DashboardFragment extends Fragment {
         pressure = view.findViewById(R.id.pressure);
         height = view.findViewById(R.id.height);
         waterVolume = view.findViewById(R.id.water_volume);
-        bukaKeran = view.findViewById(R.id.bukaKeran);
         progressVolume = view.findViewById(R.id.progressVolume);
         progressPercent = view.findViewById(R.id.progressPercent);
+        bukaKeran = view.findViewById(R.id.bukaKeran);
+        riverEffect = view.findViewById(R.id.riverEffect);
 
         new DashboardController(new TransmiterModel()).realtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
-        new CommandController(new CommandModel()).manualSwitch(bukaKeran);
+        new CommandController(new CommandModel()).manualSwitch(bukaKeran, riverEffect);
 
         return view;
     }
