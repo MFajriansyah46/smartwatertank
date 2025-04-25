@@ -12,18 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bangraja.smartwatertank.Main;
 import com.bangraja.smartwatertank.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class NotificationFragment extends Fragment {
     private CollectionReference notifRef;
+    private FirebaseFirestore db;
 
     @Nullable
     @Override
@@ -33,43 +34,48 @@ public class NotificationFragment extends Fragment {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (currentUser == null) {
-            if (getContext() != null) {
-                TextView warning = new TextView(getContext());
-                warning.setText("Silakan login untuk melihat notifikasi.");
-                warning.setTextColor(Color.WHITE);
-                warning.setTextSize(16);
-                warning.setPadding(24, 24, 24, 24);
-                notifContainer.addView(warning);
-            }
+        if (currentUser == null || getContext() == null) {
+            TextView warning = new TextView(getContext());
+            warning.setText("Silakan login untuk melihat notifikasi.");
+            warning.setTextColor(Color.WHITE);
+            warning.setTextSize(16);
+            warning.setPadding(24, 24, 24, 24);
+            notifContainer.addView(warning);
             return view;
         }
 
-        notifRef = FirebaseFirestore.getInstance().collection("tb_notifikasi");
+        String userEmail = currentUser.getEmail();
+        db = FirebaseFirestore.getInstance();
+        notifRef = db.collection("tb_notifikasi");
 
-        notifRef.orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
-                if (notifContainer == null || getContext() == null) {
-                    return;
-                }
+        notifRef.orderBy("timestamp", Query.Direction.DESCENDING)
+                .addSnapshotListener((snapshots, e) -> {
+                    if (notifContainer == null || getContext() == null || snapshots == null) return;
 
-                notifContainer.removeAllViews();
+                    notifContainer.removeAllViews();
 
-                if (snapshots == null) return;
+                    int unreadCount = 0;
+                    List<DocumentSnapshot> listNotif = snapshots.getDocuments();
 
-                List<DocumentSnapshot> listNotif = new ArrayList<>(snapshots.getDocuments());
+                    // Loop untuk memproses dokumen notifikasi
+                    for (DocumentSnapshot document : listNotif) {
+                        Map<String, Object> data = document.getData();
+                        if (data == null) continue;
 
-                for (DocumentSnapshot document : listNotif) {
-                    Map<String, Object> data = document.getData();
-                    if (data == null) continue;
+                        String email = String.valueOf(data.get("email"));
+                        String pesan = String.valueOf(data.get("pesan"));
+                        String jam = String.valueOf(data.get("jam"));
+                        String tanggal = String.valueOf(data.get("tanggal"));
+                        Boolean isRead = data.get("isRead") != null && (Boolean) data.get("isRead");
 
-                    String email = data.get("email") != null ? data.get("email").toString() : "-";
-                    String pesan = data.get("pesan") != null ? data.get("pesan").toString() : "-";
-                    String jam = data.get("jam") != null ? data.get("jam").toString() : "-";
-                    String tanggal = data.get("tanggal") != null ? data.get("tanggal").toString() : "-";
+                        if (!email.equals(userEmail)) continue;
 
-                    if (getContext() != null) {
+                        boolean unread = isRead == null || !isRead;
+                        if (unread) {
+                            unreadCount++;
+                        }
+
+                        // UI Notifikasi
                         LinearLayout card = new LinearLayout(getContext());
                         card.setOrientation(LinearLayout.VERTICAL);
                         card.setPadding(24, 24, 24, 24);
@@ -81,6 +87,24 @@ public class NotificationFragment extends Fragment {
                         );
                         params.setMargins(0, 0, 0, 24);
                         card.setLayoutParams(params);
+
+                        // Tampilkan dot merah jika belum dibaca
+                        if (unread) {
+                            View dot = new View(getContext());
+                            LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(16, 16);
+                            dotParams.setMargins(0, 0, 0, 8);
+                            dot.setLayoutParams(dotParams);
+                            dot.setBackgroundResource(R.drawable.unread_dot);
+                            card.addView(dot);
+
+                            // Set notifikasi sebagai sudah dibaca setelah card dibuka
+                            final DocumentReference notifDocRef = document.getReference();
+                            card.setOnClickListener(v -> {
+                                // Update status isRead menjadi true
+                                notifDocRef.update("isRead", true);
+                                updateBadge(); // Update badge setelah dibaca
+                            });
+                        }
 
                         TextView emailText = new TextView(getContext());
                         emailText.setText(email);
@@ -106,10 +130,32 @@ public class NotificationFragment extends Fragment {
 
                         notifContainer.addView(card);
                     }
-                }
-            }
-        });
+
+                    // Update badge jumlah notif
+                    updateBadge();
+                });
 
         return view;
     }
+
+    // Fungsi untuk mengupdate badge jumlah notif
+    private void updateBadge() {
+        if (getActivity() instanceof Main) {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                String email = currentUser.getEmail();
+                db.collection("tb_notifikasi")
+                        .whereEqualTo("email", email)
+                        .whereEqualTo("isRead", false)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                int unreadCount = task.getResult().size();
+                                ((Main) getActivity()).updateNotifBadge(unreadCount);
+                            }
+                        });
+            }
+        }
+    }
 }
+

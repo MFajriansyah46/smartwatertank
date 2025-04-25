@@ -36,17 +36,15 @@ public class SettingsActivity extends AppCompatActivity {
         bukaKeranOtomatis = findViewById(R.id.bukaKeranOtomatis);
         logoutBtn = findViewById(R.id.logoutBtn);
 
-        // Tampilkan email
+        // Tampilkan email user
         ac.displayUserEmail(emailTextView);
 
-        // Setup switch
-        cc.autoSwitch(bukaKeranOtomatis, this);
-
+        // Ambil status terakhir dari SharedPreferences
         boolean savedAutoMode = getSharedPreferences("settings", MODE_PRIVATE)
                 .getBoolean("auto_mode", false);
-
         bukaKeranOtomatis.setChecked(savedAutoMode);
 
+        // Listener untuk perubahan switch
         bukaKeranOtomatis.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Simpan status ke SharedPreferences
             getSharedPreferences("settings", MODE_PRIVATE)
@@ -59,10 +57,13 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 nc.sendNotification("Mode otomatis dimatikan: Anda telah keluar dari mode pengisian otomatis.");
             }
+
+            // Kirim perintah ke mikrokontroler atau Firebase
+            cc.setAutoMode(isChecked); // fungsi tambahan opsional
         });
 
-
-        // Logout button
+        // Tombol logout
         logoutBtn.setOnClickListener(view -> ac.logout(SettingsActivity.this));
     }
 }
+
