@@ -1,14 +1,17 @@
 package com.bangraja.smartwatertank.controller;
 
-import android.app.Activity;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.bangraja.smartwatertank.model.CommandModel;
+import com.bangraja.smartwatertank.view.custom.RiverEffect;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
 public class CommandController {
@@ -45,21 +48,38 @@ public class CommandController {
         });
     }
 
-    public void manualSwitch(Switch bukaKeran) {
+    public void manualSwitch(Switch bukaKeran, View riverEffect) {
+
+        RiverEffect re = new RiverEffect(riverEffect);
         Listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Boolean statusKeran = snapshot.child("keran").getValue(Boolean.class);
-                bukaKeran.setChecked(statusKeran != null && statusKeran);
+                boolean isOn = statusKeran != null && statusKeran;
+                bukaKeran.setChecked(isOn);
+
+                if (isOn) {
+                    re.startRiverEffect();
+                } else {
+                    re.stopRiverEffect();
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Handle possible errors.
+                // Error handling
             }
         };
+
         cm.getCommandRef().addValueEventListener(Listener);
 
-        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> cm.getCommandRef().child("keran").setValue(isChecked));
+        bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            cm.getCommandRef().child("keran").setValue(isChecked);
+            if (isChecked) {
+                re.startRiverEffect();
+            } else {
+                re.stopRiverEffect();
+            }
+        });
     }
 }

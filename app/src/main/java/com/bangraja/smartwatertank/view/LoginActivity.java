@@ -24,8 +24,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Window window = getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bread));
-        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bread));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.meat));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.meat));
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
