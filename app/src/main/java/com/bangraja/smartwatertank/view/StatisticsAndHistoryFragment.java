@@ -193,15 +193,15 @@ public class StatisticsAndHistoryFragment extends Fragment {
 
         lineChart.invalidate();
 
-//        HISTORY
+        //HISTORY
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout historyContainer = requireView().findViewById(R.id.historyContainer);
         historyContainer.removeAllViews();
 
         double max_volume = 1200.0;
 
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH.mm", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         Collections.sort(documents, (d1, d2) -> {
             Date t1 = d1.getTimestamp("timestamp").toDate();
             Date t2 = d2.getTimestamp("timestamp").toDate();
@@ -227,12 +227,11 @@ public class StatisticsAndHistoryFragment extends Fragment {
                 TextView pressureText = itemView.findViewById(R.id.pressure);
                 TextView progressPercentText = itemView.findViewById(R.id.progressPercent);
 
-                timestampText.setText(dateFormat.format(timestamp) + " " + timeFormat.format(timestamp));
+                timestampText.setText(timeFormat.format(timestamp) + "  -  " + dateFormat.format(timestamp));
                 volumeText.setText(String.format(Locale.getDefault(), "%.2f", volume));
                 heightText.setText(String.format(Locale.getDefault(), "%.2f", height));
                 pressureText.setText(String.format(Locale.getDefault(), "%.2f", pressure));
 
-                // Kalau kamu hitung progress/prosentase air:
                 double percentage = (volume / max_volume) * 100;
                 progressPercentText.setText(String.format(Locale.getDefault(), "%.1f", percentage));
 
