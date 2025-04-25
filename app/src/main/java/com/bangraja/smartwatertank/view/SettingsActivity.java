@@ -42,14 +42,25 @@ public class SettingsActivity extends AppCompatActivity {
         // Setup switch
         cc.autoSwitch(bukaKeranOtomatis, this);
 
-        // Tambahkan listener untuk notif ketika user nyalakan/matikan mode otomatis
+        boolean savedAutoMode = getSharedPreferences("settings", MODE_PRIVATE)
+                .getBoolean("auto_mode", false);
+
+        bukaKeranOtomatis.setChecked(savedAutoMode);
+
         bukaKeranOtomatis.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Simpan status ke SharedPreferences
+            getSharedPreferences("settings", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("auto_mode", isChecked)
+                    .apply();
+
             if (isChecked) {
                 nc.sendNotification("Mode otomatis aktif: Saat ini anda sedang berada dalam mode pengisian otomatis.");
             } else {
                 nc.sendNotification("Mode otomatis dimatikan: Anda telah keluar dari mode pengisian otomatis.");
             }
         });
+
 
         // Logout button
         logoutBtn.setOnClickListener(view -> ac.logout(SettingsActivity.this));
