@@ -45,7 +45,7 @@ public class CommandController {
     }
 
     public void manualSwitch(Switch bukaKeran) {
-        NotificationController nc = new NotificationController();
+        NotificationController nc = NotificationController.getInstance(); // ✅
 
         ValueEventListener perintahListener = new ValueEventListener() {
             @Override

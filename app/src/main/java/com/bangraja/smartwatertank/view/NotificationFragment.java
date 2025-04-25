@@ -15,14 +15,15 @@ import androidx.fragment.app.Fragment;
 import com.bangraja.smartwatertank.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.*;
+import com.google.firebase.firestore.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class NotificationFragment extends Fragment {
-    private DatabaseReference notifRef;
+    private CollectionReference notifRef;
 
     @Nullable
     @Override
@@ -33,7 +34,6 @@ public class NotificationFragment extends Fragment {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser == null) {
-            // User belum login
             if (getContext() != null) {
                 TextView warning = new TextView(getContext());
                 warning.setText("Silakan login untuk melihat notifikasi.");
@@ -45,33 +45,30 @@ public class NotificationFragment extends Fragment {
             return view;
         }
 
-        // Kalau user sudah login
-        notifRef = FirebaseDatabase.getInstance().getReference("notifikasi");
+        notifRef = FirebaseFirestore.getInstance().collection("tb_notifikasi");
 
-        notifRef.addValueEventListener(new ValueEventListener() {
+        notifRef.orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                 if (notifContainer == null || getContext() == null) {
-                    return; // Jangan lanjut jika context atau notifContainer null
+                    return;
                 }
 
                 notifContainer.removeAllViews();
 
-                List<DataSnapshot> listNotif = new ArrayList<>();
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    listNotif.add(data);
-                }
+                if (snapshots == null) return;
 
-                // Urutkan agar terbaru di atas (jika kamu simpan secara urut di Firebase, ini bisa dibalik aja)
-                Collections.reverse(listNotif);
+                List<DocumentSnapshot> listNotif = new ArrayList<>(snapshots.getDocuments());
 
-                for (DataSnapshot data : listNotif) {
-                    String email = data.child("email").getValue() != null ? data.child("email").getValue().toString() : "-";
-                    String pesan = data.child("pesan").getValue() != null ? data.child("pesan").getValue().toString() : "-";
-                    String jam = data.child("jam").getValue() != null ? data.child("jam").getValue().toString() : "-";
-                    String tanggal = data.child("tanggal").getValue() != null ? data.child("tanggal").getValue().toString() : "-";
+                for (DocumentSnapshot document : listNotif) {
+                    Map<String, Object> data = document.getData();
+                    if (data == null) continue;
 
-                    // Pastikan getContext() tidak null sebelum membuat LinearLayout
+                    String email = data.get("email") != null ? data.get("email").toString() : "-";
+                    String pesan = data.get("pesan") != null ? data.get("pesan").toString() : "-";
+                    String jam = data.get("jam") != null ? data.get("jam").toString() : "-";
+                    String tanggal = data.get("tanggal") != null ? data.get("tanggal").toString() : "-";
+
                     if (getContext() != null) {
                         LinearLayout card = new LinearLayout(getContext());
                         card.setOrientation(LinearLayout.VERTICAL);
@@ -110,11 +107,6 @@ public class NotificationFragment extends Fragment {
                         notifContainer.addView(card);
                     }
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Log error jika perlu
             }
         });
 
