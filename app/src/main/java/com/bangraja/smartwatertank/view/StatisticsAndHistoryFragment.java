@@ -11,21 +11,16 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.bangraja.smartwatertank.view.custom.CustomMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.utils.MPPointF;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,12 +31,11 @@ import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import android.content.Context;
 
 public class StatisticsAndHistoryFragment extends Fragment {
 
     private LineChart lineChart;
-    Spinner filterSpinner;
+    private Spinner filterSpinner;
 
     @Nullable
     @Override
