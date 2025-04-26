@@ -38,7 +38,7 @@
                         android:id="@+id/water_volume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="N/A"
+                        android:text="- - -"
                         android:textColor="@android:color/white"
                         android:textSize="32sp"
                         android:textStyle="bold" />
@@ -116,7 +116,7 @@
             <!-- Kotak: Tekanan -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:layout_columnWeight="1"
                 android:layout_column="0"
                 android:layout_marginEnd="8dp"
@@ -141,7 +141,7 @@
                         android:id="@+id/pressure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="N/A"
+                        android:text="- - -"
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -159,7 +159,7 @@
             <!-- Kotak: Ketinggian -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:layout_columnWeight="1"
                 android:layout_column="1"
                 android:layout_marginStart="8dp"
@@ -184,7 +184,7 @@
                         android:id="@+id/height"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="N/A"
+                        android:text="- - -"
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -203,17 +203,34 @@
         </GridLayout>
 
 
-
-        <!-- Switch Buka Keran -->
-        <Switch
-            android:id="@+id/bukaKeran"
+        <FrameLayout
+            android:id="@+id/switchContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Buka Keran"
-            android:textColor="@android:color/white"
-            android:thumbTint="@android:color/white"
-            android:trackTint="@android:color/white"
-            android:padding="8dp" />
+            android:layout_marginTop="48dp"
+            android:background="@drawable/rounded_box">
+
+            <!-- Overlay untuk efek animasi air -->
+            <View
+                android:id="@+id/riverEffect"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/river_animation"
+                android:visibility="gone" />
+
+            <Switch
+                android:id="@+id/bukaKeran"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="54dp"
+                android:text="Buka Keran"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:thumbTint="@android:color/white"
+                android:trackTint="@android:color/white"
+                android:padding="8dp" />
+
+        </FrameLayout>
+
     </LinearLayout>
 </ScrollView>

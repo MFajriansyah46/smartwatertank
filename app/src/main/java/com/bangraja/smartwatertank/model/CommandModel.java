@@ -12,20 +12,8 @@ public class CommandModel {
         commandRef = FirebaseDatabase.getInstance().getReference("perintah");
     }
 
-    // Mendapatkan referensi ke node "perintah"
     public DatabaseReference getCommandRef() {
         return commandRef;
     }
 
-    public void addCommandListener(ValueEventListener listener) {
-        commandRef.addValueEventListener(listener);
-    }
-
-    public void removeCommandListener(ValueEventListener listener) {
-        commandRef.removeEventListener(listener);
-    }
-
-    public void updateKeranStatus(boolean isChecked) {
-        commandRef.child("keran").setValue(isChecked);
-    }
 }

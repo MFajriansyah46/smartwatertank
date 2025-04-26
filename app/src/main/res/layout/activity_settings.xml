@@ -1,40 +1,35 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/meat"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <!-- Top Bar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:title="Setelan"
+        app:titleTextColor="@color/white"
+        android:background="@color/bread" />
 
-        <!-- Top Bar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/bread"
-            android:title="Settings"
-            android:titleTextColor="@color/white" />
-
-        <!-- Profile Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="@color/bread"
             android:padding="16dp"
-            android:background="@drawable/rounded_box"
-            android:layout_marginTop="16dp"
             android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/ic_profile"
-                android:contentDescription="Profile Icon"
-                android:layout_marginEnd="16dp"
-                android:tint="@android:color/white" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/blank_profile" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -42,65 +37,79 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/profileName"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/nameView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bang Raja"
+                    android:text="Anonim"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:background="@android:color/transparent"
-                    android:inputType="textPersonName"
-                    android:padding="0dp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/emailView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="bangraja@gmail.com"
-                    android:textColor="#CCCCCC"
+                    android:layout_marginTop="8dp"
+                    android:text="anonim"
+                    android:textColor="@android:color/white"
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/editNameIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_edit"
-                android:tint="@android:color/white"
-                android:contentDescription="Edit Name" />
+
+            <Button
+                android:id="@+id/logoutBtn"
+                android:layout_width="73dp"
+                android:layout_height="34dp"
+                android:backgroundTint="@color/bread"
+                android:elevation="2dp"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="0dp"
+                android:paddingVertical="0dp"
+                android:stateListAnimator="@null"
+                android:text="Logout"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Logout Button -->
-        <Button
-            android:id="@+id/logoutBtn"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:background="@color/bread">
+
+        <!-- Keterangan Judul -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/bread"
-            android:text="Logout"
-            android:textColor="@android:color/white"
+            android:text="Kontrol"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textColor="@android:color/white"
+            android:paddingBottom="8dp" />
 
-        <!-- Otomatis Switch -->
-        <LinearLayout
+        <!-- Switch Kontrol -->
+        <Switch
+            android:id="@+id/bukaKeranOtomatis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:text="Buka keran otomatis"
+            android:textColor="@android:color/white"
+            android:thumbTint="@android:color/white"
+            android:trackTint="@android:color/white"
+            android:textSize="15sp"/>
 
-            <Switch
-                android:id="@+id/bukaKeranOtomatis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Buka keran otomatis"
-                android:textColor="@android:color/white"
-                android:thumbTint="@android:color/white"
-                android:trackTint="@android:color/white" />
-        </LinearLayout>
+        <!-- Keterangan Fungsi Switch -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Keran akan terbuka otomatis saat air habis"
+            android:textSize="12sp"
+            android:textColor="@android:color/white" />
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>
