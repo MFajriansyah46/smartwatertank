@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Window window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.bread));
-        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bread));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.meat));
 
         emailView = findViewById(R.id.emailView);
         nameView = findViewById(R.id.nameView);
