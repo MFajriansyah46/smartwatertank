@@ -1,18 +1,16 @@
 package com.bangraja.smartwatertank.controller;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
 import android.widget.Switch;
-
 import androidx.annotation.NonNull;
-
+import androidx.core.content.ContextCompat;
 import com.bangraja.smartwatertank.model.CommandModel;
 import com.bangraja.smartwatertank.view.custom.RiverEffect;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
+import com.bangraja.smartwatertank.R;
 
 public class CommandController {
     private final CommandModel cm;
@@ -48,7 +46,7 @@ public class CommandController {
         });
     }
 
-    public void manualSwitch(Switch bukaKeran, View riverEffect) {
+    public void manualSwitch(Switch bukaKeran, View riverEffect, LinearLayout switchContainer) {
 
         RiverEffect re = new RiverEffect(riverEffect);
         Listener = new ValueEventListener() {
@@ -60,8 +58,10 @@ public class CommandController {
 
                 if (isOn) {
                     re.startRiverEffect();
+                    switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.active_rounded_box));
                 } else {
                     re.stopRiverEffect();
+                    switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.rounded_box));
                 }
             }
 
@@ -75,10 +75,13 @@ public class CommandController {
 
         bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> {
             cm.getCommandRef().child("keran").setValue(isChecked);
+
             if (isChecked) {
                 re.startRiverEffect();
+                switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.active_rounded_box));
             } else {
                 re.stopRiverEffect();
+                switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.rounded_box));
             }
         });
     }
