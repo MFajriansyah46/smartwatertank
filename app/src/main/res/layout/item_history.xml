@@ -35,7 +35,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:orientation="vertical"
             android:paddingEnd="8dp">
 
@@ -48,7 +48,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
+                    android:layout_marginStart="4dp"
                     android:text="Volume"
                     android:textColor="@android:color/white"
                     android:textSize="14sp" />
@@ -63,7 +63,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
+                    android:layout_marginStart="4dp"
                     android:text="Ketinggian"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"/>
@@ -73,9 +73,9 @@
 
         <!-- Kolom value 2 -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.85"
             android:orientation="vertical"
             android:paddingEnd="0dp">
 
@@ -99,15 +99,15 @@
                     android:layout_marginStart="4dp"
                     android:text="N/A"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="L"
+                    android:text="l"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <!-- Ketinggian -->
@@ -130,15 +130,15 @@
                     android:layout_marginStart="4dp"
                     android:text="N/A"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="M"
+                    android:text="pa"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -146,9 +146,11 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:orientation="vertical"
-            android:paddingEnd="8dp">
+            android:paddingEnd="8dp"
+            android:layout_marginStart="2dp">
+
 
             <!-- Volume -->
             <LinearLayout
@@ -185,17 +187,17 @@
 
         <!-- Kolom 4 -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.03"
             android:orientation="vertical">
 
             <!-- Presentase -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="4dp">
+                android:layout_marginBottom="4dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -211,7 +213,7 @@
                     android:layout_marginStart="4dp"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -219,7 +221,8 @@
                     android:layout_marginStart="4dp"
                     android:text="%"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:layout_marginEnd="4dp" />
             </LinearLayout>
 
             <!-- Tekanan -->
@@ -242,13 +245,14 @@
                     android:layout_marginStart="4dp"
                     android:text="N/A"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
-                    android:text="Pa"
+                    android:layout_marginEnd="4dp"
+                    android:text="m"
                     android:textColor="@android:color/white"
                     android:textSize="14sp" />
             </LinearLayout>
