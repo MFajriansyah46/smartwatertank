@@ -21,7 +21,7 @@
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="user@email.com"
+                android:text=""
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@color/white" />
@@ -31,7 +31,7 @@
                 android:id="@+id/desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Keterangan notifikasi di sini"
+                android:text=""
                 android:textSize="14sp"
                 android:textColor="#E0E0E0"
                 android:layout_marginTop="2dp" />
@@ -47,14 +47,14 @@
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="14:30"
+                    android:text=""
                     android:textSize="12sp"
                     android:textColor="#E0E0E0" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" • "
+                    android:text=""
                     android:textSize="12sp"
                     android:textColor="#E0E0E0" />
 
@@ -62,7 +62,7 @@
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2025-04-07"
+                    android:text=""
                     android:textSize="12sp"
                     android:textColor="#E0E0E0" />
             </LinearLayout>
