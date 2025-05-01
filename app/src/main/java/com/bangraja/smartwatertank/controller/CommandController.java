@@ -43,6 +43,8 @@ public class CommandController {
             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             cm.getCommandRef().child("otomatis").setValue(isChecked);
             cm.getCommandRef().child("operator").setValue(email);
+
+            NotificationController.getInstance().handleAutoSwitchChange(isChecked);
         });
     }
 
@@ -83,6 +85,7 @@ public class CommandController {
                 re.stopRiverEffect();
                 switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.rounded_box));
             }
+            NotificationController.getInstance().handleManualSwitchChange(isChecked);
         });
     }
 }
