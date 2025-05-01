@@ -7,6 +7,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.bangraja.smartwatertank.model.CommandModel;
+import com.bangraja.smartwatertank.model.NotificationModel;
 import com.bangraja.smartwatertank.view.custom.RiverEffect;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
@@ -45,7 +46,7 @@ public class CommandController {
             cm.getCommandRef().child("operator").setValue(email);
 
             // Notifikasi untuk mode otomatis
-            NotificationController nc = NotificationController.getInstance();
+            NotificationController nc = new NotificationController(new NotificationModel());
             if (isChecked) {
                 nc.sendNotification("Mode otomatis diaktifkan: Saat ini anda sedang berada dalam pengisian mode otomatis");
             } else {
@@ -90,7 +91,7 @@ public class CommandController {
             cm.getCommandRef().child("keran").setValue(isChecked);
 
             // Mengirim notifikasi hanya ketika status berubah oleh pengguna
-            NotificationController nc = NotificationController.getInstance();
+            NotificationController nc = new NotificationController(new NotificationModel());
             if (isChecked) {
                 nc.sendNotification("Keran dibuka");
             } else {

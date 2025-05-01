@@ -1,11 +1,9 @@
 package com.bangraja.smartwatertank.controller;
 
 import android.util.Log;
-
+import com.bangraja.smartwatertank.model.NotificationModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,18 +11,10 @@ import java.util.Locale;
 import java.util.Map;
 
 public class NotificationController {
-    private static NotificationController instance;
-    private final FirebaseFirestore db;
+    private final NotificationModel nm;
 
-    private NotificationController() {
-        db = FirebaseFirestore.getInstance();
-    }
-
-    public static NotificationController getInstance() {
-        if (instance == null) {
-            instance = new NotificationController();
-        }
-        return instance;
+    public NotificationController(NotificationModel nm) {
+        this.nm = nm;
     }
 
     public void sendNotification(String pesan) {
@@ -43,7 +33,7 @@ public class NotificationController {
         data.put("timestamp", Timestamp.now()); // ✅ Gunakan Firestore timestamp
         data.put("isRead", false);
 
-        db.collection("tb_notifikasi")
+        nm.getNotifRef()
                 .add(data)
                 .addOnSuccessListener(documentReference -> Log.d("Notif", "Berhasil kirim notifikasi"))
                 .addOnFailureListener(e -> Log.e("Notif", "Gagal kirim notifikasi", e));
