@@ -81,7 +81,7 @@ public class StatisticsAndHistoryFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedFilter = parent.getItemAtPosition(position).toString();
-                monitoringController.filterHistory(selectedFilter, requireContext(), rootView);
+                monitoringController.historyData(selectedFilter, requireContext(), rootView);
             }
 
             @Override

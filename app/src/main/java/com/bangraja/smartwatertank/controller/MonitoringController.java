@@ -79,74 +79,18 @@ public class MonitoringController {
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                        updateChartWithDocuments(documents, filter, lineChart, context);
+                        updateChart(documents, filter, lineChart, context);
                     });
         } else {
             um.getUkuranRef().get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                        updateChartWithDocuments(documents, filter, lineChart, context);
+                        updateChart(documents, filter, lineChart, context);
                     });
         }
     }
 
-    public void filterHistory(String filter, Context context, View rootView) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference ref = db.collection("tb_ukuran");
-
-        Date startDate = null;
-        Calendar calendar = Calendar.getInstance();
-
-        switch (filter) {
-            case "Hari ini":
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                startDate = calendar.getTime();
-                break;
-
-            case "Bulan ini":
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                startDate = calendar.getTime();
-                break;
-
-            case "Tahun ini":
-                calendar.set(Calendar.MONTH, Calendar.JANUARY);
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                startDate = calendar.getTime();
-                break;
-
-            case "Semua":
-                startDate = null;
-                break;
-        }
-
-        if (startDate != null) {
-            um.getUkuranRef().whereGreaterThanOrEqualTo("timestamp", startDate)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                        updateHistory(documents, context, rootView);
-                    });
-        } else {
-            um.getUkuranRef().get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                        updateHistory(documents, context, rootView);
-                    });
-        }
-    }
-
-    private void updateChartWithDocuments(List<DocumentSnapshot> documents, String filter, LineChart lineChart, Context context) {
+    private void updateChart(List<DocumentSnapshot> documents, String filter, LineChart lineChart, Context context) {
         List<Entry> entries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
@@ -220,6 +164,62 @@ public class MonitoringController {
         lineChart.setMarker(marker);
 
         lineChart.invalidate();
+    }
+
+    public void historyData(String filter, Context context, View rootView) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference ref = db.collection("tb_ukuran");
+
+        Date startDate = null;
+        Calendar calendar = Calendar.getInstance();
+
+        switch (filter) {
+            case "Hari ini":
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                startDate = calendar.getTime();
+                break;
+
+            case "Bulan ini":
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                startDate = calendar.getTime();
+                break;
+
+            case "Tahun ini":
+                calendar.set(Calendar.MONTH, Calendar.JANUARY);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                startDate = calendar.getTime();
+                break;
+
+            case "Semua":
+                startDate = null;
+                break;
+        }
+
+        if (startDate != null) {
+            um.getUkuranRef().whereGreaterThanOrEqualTo("timestamp", startDate)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        updateHistory(documents, context, rootView);
+                    });
+        } else {
+            um.getUkuranRef().get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        updateHistory(documents, context, rootView);
+                    });
+        }
     }
 
     private void updateHistory(List<DocumentSnapshot> documents, Context context, View rootView) {
