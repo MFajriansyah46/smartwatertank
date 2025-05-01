@@ -43,11 +43,18 @@ public class CommandController {
             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             cm.getCommandRef().child("otomatis").setValue(isChecked);
             cm.getCommandRef().child("operator").setValue(email);
+
+            // Notifikasi untuk mode otomatis
+            NotificationController nc = NotificationController.getInstance();
+            if (isChecked) {
+                nc.sendNotification("Mode otomatis diaktifkan: Saat ini anda sedang berada dalam pengisian mode otomatis");
+            } else {
+                nc.sendNotification("Mode otomatis dimatikan: Anda telah keluar dari mode pengisian otomatis");
+            }
         });
     }
 
     public void manualSwitch(Switch bukaKeran, View riverEffect, LinearLayout switchContainer) {
-
         RiverEffect re = new RiverEffect(riverEffect);
         Listener = new ValueEventListener() {
             @Override
@@ -73,16 +80,38 @@ public class CommandController {
 
         cm.getCommandRef().addValueEventListener(Listener);
 
+        // Flag untuk mendeteksi apakah perubahan datang dari pengguna
+        final boolean[] fromUser = {false};
+
+        // Menangani perubahan status manual dari switch
         bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!fromUser[0]) return; // Jika perubahan bukan berasal dari user, jangan kirim notifikasi
+
             cm.getCommandRef().child("keran").setValue(isChecked);
 
+            // Mengirim notifikasi hanya ketika status berubah oleh pengguna
+            NotificationController nc = NotificationController.getInstance();
             if (isChecked) {
-                re.startRiverEffect();
-                switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.active_rounded_box));
+                nc.sendNotification("Keran dibuka");
             } else {
-                re.stopRiverEffect();
-                switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.rounded_box));
+                nc.sendNotification("Keran ditutup");
             }
+
+            fromUser[0] = false; // Reset setelah aksi user
+        });
+
+        // Deteksi perubahan dari pengguna
+        bukaKeran.setOnTouchListener((v, event) -> {
+            fromUser[0] = true;
+            return false;
         });
     }
+
+    public void cleanup() {
+        if (Listener != null) {
+            cm.getCommandRef().removeEventListener(Listener);
+            Listener = null;  // Menghapus listener setelah tidak dibutuhkan lagi
+        }
+    }
+
 }
