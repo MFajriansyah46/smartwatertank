@@ -1,5 +1,6 @@
 package com.bangraja.smartwatertank.controller;
 
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -61,8 +62,10 @@ public class DashboardController {
     private static void estimasiFull(TextView estimasiView, FillingModel fm) {
 
         fm.getFillingRef()
+                .whereGreaterThan("terisi", 0)
+                .whereGreaterThanOrEqualTo("waktu", 1)
                 .orderBy("tanggal", Query.Direction.DESCENDING)
-                .limit(15)
+                .limit(25)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Double> volumeList = new ArrayList<>();
@@ -87,7 +90,7 @@ public class DashboardController {
                             estimasiView.setText("Tangki penuh");
                         }
                     } else {
-                        estimasiView.setText("Data kosong");
+                        estimasiView.setVisibility(View.GONE);
                     }
                 })
                 .addOnFailureListener(e -> {
