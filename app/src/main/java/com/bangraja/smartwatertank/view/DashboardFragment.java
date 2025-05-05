@@ -18,7 +18,7 @@ import com.bangraja.smartwatertank.model.CommandModel;
 import com.bangraja.smartwatertank.model.TransmiterModel;
 
 public class DashboardFragment extends Fragment {
-    private TextView pressure, height, waterVolume, progressPercent;
+    private TextView pressure, height, waterVolume, progressPercent, estimasiView;
     private Switch bukaKeran;
     private LinearLayout switchContainer;
     private ProgressBar progressVolume;
@@ -34,12 +34,13 @@ public class DashboardFragment extends Fragment {
         waterVolume = view.findViewById(R.id.water_volume);
         progressVolume = view.findViewById(R.id.progressVolume);
         progressPercent = view.findViewById(R.id.progressPercent);
+        estimasiView = view.findViewById(R.id.estimasiView);
         bukaKeran = view.findViewById(R.id.bukaKeran);
         switchContainer = view.findViewById(R.id.switchContainer);
         riverEffect = view.findViewById(R.id.riverEffect);
 
-        new DashboardController(new TransmiterModel()).realtimeData(pressure, height, waterVolume,progressVolume, progressPercent);
-        new CommandController(new CommandModel()).manualSwitch(bukaKeran, riverEffect, switchContainer);
+        new DashboardController(new TransmiterModel()).realtimeData(pressure, height, waterVolume, progressVolume, progressPercent, estimasiView);
+        new CommandController(new CommandModel()).manualSwitch(bukaKeran, estimasiView, riverEffect, switchContainer);
 
         return view;
     }

@@ -4,6 +4,8 @@ package com.bangraja.smartwatertank.controller;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.bangraja.smartwatertank.model.CommandModel;
@@ -55,7 +57,7 @@ public class CommandController {
         });
     }
 
-    public void manualSwitch(Switch bukaKeran, View riverEffect, LinearLayout switchContainer) {
+    public void manualSwitch(Switch bukaKeran, TextView estimasiView, View riverEffect, LinearLayout switchContainer) {
         RiverEffect re = new RiverEffect(riverEffect);
         Listener = new ValueEventListener() {
             @Override
@@ -66,9 +68,11 @@ public class CommandController {
 
                 if (isOn) {
                     re.startRiverEffect();
+                    estimasiView.setVisibility(View.VISIBLE);
                     switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.active_rounded_box));
                 } else {
                     re.stopRiverEffect();
+                    estimasiView.setVisibility(View.GONE);
                     switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.rounded_box));
                 }
             }
