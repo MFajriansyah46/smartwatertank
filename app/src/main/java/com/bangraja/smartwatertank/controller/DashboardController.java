@@ -9,6 +9,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,8 @@ public class DashboardController {
     private static void estimasiFull(TextView estimasiView, FillingModel fm) {
 
         fm.getFillingRef()
+                .orderBy("tanggal", Query.Direction.DESCENDING)
+                .limit(15)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Double> volumeList = new ArrayList<>();
@@ -78,7 +81,11 @@ public class DashboardController {
                     if (!volumeList.isEmpty()) {
                         double yPrediksi = singleExponentialSmoothing(volumeList, timeList);
                         int timePrediction = (int) Math.round(yPrediksi);
-                        estimasiView.setText(timePrediction + " menit hingga penuh");
+                        if(timePrediction > 0) {
+                            estimasiView.setText(timePrediction + " menit hingga penuh");
+                        } else {
+                            estimasiView.setText("Tangki penuh");
+                        }
                     } else {
                         estimasiView.setText("Data kosong");
                     }
