@@ -12,7 +12,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="125dp"
             android:layout_marginVertical="16dp"
             android:background="@drawable/rounded_box">
 
@@ -37,18 +37,25 @@
                     android:orientation="vertical"
                     android:gravity="start|center_vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Volume"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"/>
+
                     <!-- Baris untuk N/A dan L -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp" >
 
                         <TextView
                             android:id="@+id/water_volume"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="- - -"
+                            android:text="879,56"
                             android:textColor="@android:color/white"
                             android:textSize="32sp"
                             android:textStyle="bold" />
@@ -63,11 +70,14 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/estimasiView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Volume"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textColor="@android:color/holo_orange_light"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:visibility="gone"/>
+
                 </LinearLayout>
 
                 <RelativeLayout
