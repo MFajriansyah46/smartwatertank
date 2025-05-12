@@ -23,7 +23,7 @@
                 android:id="@+id/backIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="29dp"
-                android:contentDescription="Back"
+                android:layout_marginEnd="4dp"
                 android:src="@drawable/ic_back"
                 android:tint="@color/white" />
 
