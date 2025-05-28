@@ -30,13 +30,12 @@ public class NotificationController {
         data.put("pesan", pesan);
         data.put("jam", jam);
         data.put("tanggal", tanggal);
-        data.put("timestamp", Timestamp.now()); // ✅ Gunakan Firestore timestamp
+        data.put("timestamp", Timestamp.now());
         data.put("isRead", false);
 
         nm.getNotifRef()
                 .add(data)
                 .addOnSuccessListener(documentReference -> Log.d("Notif", "Berhasil kirim notifikasi"))
-                .addOnFailureListener(e -> Log.e("Notif", "Gagal kirim notifikasi", e));
-    }
+                .addOnFailureListener(e -> Log.e("Notif", "Gagal kirim notifikasi"));
 }
-
+}

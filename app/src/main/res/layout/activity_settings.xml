@@ -3,108 +3,107 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/meat"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bread"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/backIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="29dp"
-                android:layout_marginEnd="4dp"
-                android:src="@drawable/ic_back" />
-
-            <TextView
-                android:id="@+id/titleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Setelan"
-                android:textColor="@color/white"
-                android:textSize="22sp" />
-        </LinearLayout>
-
-    </androidx.appcompat.widget.Toolbar>
-
-
+    <!-- Navbar atas dengan tulisan "Setting" -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/bread"
         android:padding="16dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:background="@color/bread">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+        <ImageView
+            android:id="@+id/backIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="29dp"
             android:layout_marginEnd="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/blank_profile" />
+            android:src="@drawable/ic_back" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/nameView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Anonim"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/emailView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="anonim"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/editBtn"
+        <TextView
+            android:id="@+id/titleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_edit" />
-        </LinearLayout>
-
+            android:text="Setting"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="normal" />
     </LinearLayout>
 
+    <!-- Container Profil (disamakan dengan container dashboard) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_box">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/blank_profile" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nameView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Anonim"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/emailView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="anonim"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/editBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_edit" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Container Kontrol -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_box"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:layout_marginTop="12dp"
-        android:gravity="center_vertical"
-        android:background="@color/bread">
+        android:padding="16dp"
+        android:layout_marginTop="16dp">
 
-        <!-- Keterangan Judul -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,7 +112,6 @@
             android:textColor="@android:color/white"
             android:paddingBottom="8dp" />
 
-        <!-- Switch Kontrol -->
         <Switch
             android:id="@+id/bukaKeranOtomatis"
             android:layout_width="match_parent"
@@ -124,15 +122,16 @@
             android:trackTint="@android:color/white"
             android:textSize="15sp"/>
 
-        <!-- Keterangan Fungsi Switch -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Keran akan terbuka otomatis saat air habis"
             android:textSize="12sp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"/>
     </LinearLayout>
 
+    <!-- Tombol Logout -->
     <Button
         android:id="@+id/logoutBtn"
         android:layout_width="match_parent"
@@ -142,6 +141,6 @@
         android:textColor="#FFFFFF"
         android:background="@drawable/logout_background"
         android:padding="8dp"
-        android:layout_margin="16dp"/>
-
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
 </LinearLayout>
