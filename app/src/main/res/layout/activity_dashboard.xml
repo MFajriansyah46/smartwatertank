@@ -235,7 +235,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_box"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        android:paddingStart="8dp">
 
         <Switch
             android:id="@+id/bukaKeran"
