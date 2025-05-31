@@ -40,7 +40,6 @@ public class NotificationController {
         String jam = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(now);
         String tanggal = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(now);
 
-        // Simpan ke Firebase
         Map<String, Object> data = new HashMap<>();
         data.put("email", email);
         data.put("pesan", pesan);
@@ -53,8 +52,7 @@ public class NotificationController {
                 .add(data)
                 .addOnSuccessListener(documentReference -> {
                     Log.d("Notif", "Berhasil kirim notifikasi");
-                    // Tampilkan notifikasi lokal di Android
-                    showLocalNotification(context, "Smart Water Tank", pesan);
+                    showLocalNotification(context, email, pesan);
                 })
                 .addOnFailureListener(e -> Log.e("Notif", "Gagal kirim notifikasi"));
     }
@@ -80,8 +78,7 @@ public class NotificationController {
         );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-
+                .setSmallIcon(R.drawable.ic_profile)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
