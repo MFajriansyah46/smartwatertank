@@ -43,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         backIcon.setOnClickListener(v -> onBackPressed());
         new AuthController(new AuthModel()).displayUserProfile(emailView, nameView, imageView);
-        new CommandController(new CommandModel()).autoSwitch(bukaKeranOtomatis);
+        new CommandController(new CommandModel(), this).autoSwitch(bukaKeranOtomatis);
         logoutBtn.setOnClickListener(view -> new AuthController(new AuthModel()).logout(SettingsActivity.this));
     }
 }

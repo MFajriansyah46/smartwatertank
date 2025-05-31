@@ -40,7 +40,7 @@ public class DashboardFragment extends Fragment {
         riverEffect = view.findViewById(R.id.riverEffect);
 
         new DashboardController(new TransmiterModel()).realtimeData(pressure, height, waterVolume, progressVolume, progressPercent, estimasiView);
-        new CommandController(new CommandModel()).manualSwitch(bukaKeran, estimasiView, riverEffect, switchContainer);
+        new CommandController(new CommandModel(), requireContext()).manualSwitch(bukaKeran, estimasiView, riverEffect, switchContainer);
 
         return view;
     }

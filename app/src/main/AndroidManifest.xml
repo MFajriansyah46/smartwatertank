@@ -6,6 +6,8 @@
     <!-- Izin untuk akses internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <!-- Deklarasi aplikasi -->
     <application
         android:allowBackup="true"
