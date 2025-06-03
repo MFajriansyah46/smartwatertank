@@ -3,16 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="24dp"
+    android:background="@color/bread">
 
-    <!-- Top Bar -->
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bread"
         app:title="SMART WATER TANK"
-        app:titleTextColor="@color/white"
-        android:background="@color/bread" />
+        app:titleTextColor="@color/white" />
+
+    <!-- Fake shadow under Toolbar -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/shadow_top" />
 
     <!-- Fragment Container -->
     <FrameLayout
@@ -22,14 +30,22 @@
         android:layout_weight="1"
         android:background="@color/meat" />
 
+    <!-- Fake shadow above BottomNavigationView -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/shadow_bottom" />
+
+    <!-- BottomNavigationView -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:background="@color/bread"
         app:menu="@menu/bottom_navigation_menu"
         app:itemIconSize="26dp"
         app:itemIconTint="@color/nav_icon_color"
-        app:itemTextColor="@color/nav_item_color"/>
+        app:itemTextColor="@color/nav_item_color" />
 
 </LinearLayout>
