@@ -4,9 +4,12 @@ package com.bangraja.smartwatertank.controller;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.bangraja.smartwatertank.model.CommandModel;
+import com.bangraja.smartwatertank.model.NotificationModel;
 import com.bangraja.smartwatertank.view.custom.RiverEffect;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
@@ -44,12 +47,17 @@ public class CommandController {
             cm.getCommandRef().child("otomatis").setValue(isChecked);
             cm.getCommandRef().child("operator").setValue(email);
 
-            NotificationController.getInstance().handleAutoSwitchChange(isChecked);
+            // Notifikasi untuk mode otomatis
+            NotificationController nc = new NotificationController(new NotificationModel());
+            if (isChecked) {
+                nc.sendNotification("Mode otomatis diaktifkan: Saat ini anda sedang berada dalam pengisian mode otomatis");
+            } else {
+                nc.sendNotification("Mode otomatis dimatikan: Anda telah keluar dari mode pengisian otomatis");
+            }
         });
     }
 
-    public void manualSwitch(Switch bukaKeran, View riverEffect, LinearLayout switchContainer) {
-
+    public void manualSwitch(Switch bukaKeran, TextView estimasiView, View riverEffect, LinearLayout switchContainer) {
         RiverEffect re = new RiverEffect(riverEffect);
         Listener = new ValueEventListener() {
             @Override
@@ -60,9 +68,11 @@ public class CommandController {
 
                 if (isOn) {
                     re.startRiverEffect();
+                    estimasiView.setVisibility(View.VISIBLE);
                     switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.active_rounded_box));
                 } else {
                     re.stopRiverEffect();
+                    estimasiView.setVisibility(View.GONE);
                     switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.rounded_box));
                 }
             }
@@ -75,17 +85,38 @@ public class CommandController {
 
         cm.getCommandRef().addValueEventListener(Listener);
 
+        // Flag untuk mendeteksi apakah perubahan datang dari pengguna
+        final boolean[] fromUser = {false};
+
+        // Menangani perubahan status manual dari switch
         bukaKeran.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!fromUser[0]) return; // Jika perubahan bukan berasal dari user, jangan kirim notifikasi
+
             cm.getCommandRef().child("keran").setValue(isChecked);
 
+            // Mengirim notifikasi hanya ketika status berubah oleh pengguna
+            NotificationController nc = new NotificationController(new NotificationModel());
             if (isChecked) {
-                re.startRiverEffect();
-                switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.active_rounded_box));
+                nc.sendNotification("Keran dibuka");
             } else {
-                re.stopRiverEffect();
-                switchContainer.setBackground(ContextCompat.getDrawable(switchContainer.getContext(), R.drawable.rounded_box));
+                nc.sendNotification("Keran ditutup");
             }
-            NotificationController.getInstance().handleManualSwitchChange(isChecked);
+
+            fromUser[0] = false; // Reset setelah aksi user
+        });
+
+        // Deteksi perubahan dari pengguna
+        bukaKeran.setOnTouchListener((v, event) -> {
+            fromUser[0] = true;
+            return false;
         });
     }
+
+    public void cleanup() {
+        if (Listener != null) {
+            cm.getCommandRef().removeEventListener(Listener);
+            Listener = null;  // Menghapus listener setelah tidak dibutuhkan lagi
+        }
+    }
+
 }
