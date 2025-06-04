@@ -1,5 +1,6 @@
 package com.bangraja.smartwatertank.controller;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -9,8 +10,9 @@ import com.bangraja.smartwatertank.model.TransmiterModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +21,21 @@ public class DashboardController {
     private Long pressureValue;
     private ValueEventListener transmiterListener;
     private final TransmiterModel tm;
-    public DashboardController(TransmiterModel tm) {
+    private NotificationController notificationController;
 
+    // Variabel untuk menyimpan persentase terakhir yang sudah diberi notifikasi
+    private int lastNotificationPercent = -1;
+
+    public DashboardController(TransmiterModel tm) {
         this.tm = tm;
+        this.notificationController = new NotificationController(new com.bangraja.smartwatertank.model.NotificationModel());
     }
 
-    public void realtimeData(TextView pressure, TextView height, TextView waterVolume, ProgressBar progressVolume, TextView progressPercent, TextView estimasiView) {
+    // Terima Context untuk dipakai di notificationController
+    public void realtimeData(TextView pressure, TextView height, TextView waterVolume,
+                             ProgressBar progressVolume, TextView progressPercent, TextView estimasiView,
+                             Context context) {
+
         transmiterListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -44,9 +55,22 @@ public class DashboardController {
                 height.setText(heightValue != null ? String.format("%.2f", heightValue) : "N/A");
                 waterVolume.setText(waterVolumeValue != null ? String.format("%.2f", waterVolumeValue) : "N/A");
 
-                int percent = Math.min(100, (int) Math.round((waterVolumeValue / maxVolumeValue) * 100));
+                int percent = 0;
+                if (waterVolumeValue != null && maxVolumeValue != null && maxVolumeValue > 0) {
+                    percent = Math.min(100, (int) Math.round((waterVolumeValue / maxVolumeValue) * 100));
+                }
                 progressVolume.setProgress(percent);
                 progressPercent.setText(String.valueOf(percent));
+
+                // **Cek dan kirim notifikasi "Sebentar lagi air penuh" sekali saja saat persen >= 75**
+                if (percent >= 90 && lastNotificationPercent < 90) {
+                    notificationController.sendNotification(context,  "Sebentar lagi air penuh");
+                }
+                lastNotificationPercent = percent;
+
+                // Panggil pengecekan notifikasi lainnya (jika ada)
+                notificationController.checkWaterLevelAndNotify(percent, context);
+
                 estimasiFull(estimasiView, new FillingModel());
             }
 
@@ -59,8 +83,8 @@ public class DashboardController {
         };
         tm.getTransmiterRef().addValueEventListener(transmiterListener);
     }
-    private static void estimasiFull(TextView estimasiView, FillingModel fm) {
 
+    private static void estimasiFull(TextView estimasiView, FillingModel fm) {
         fm.getFillingRef()
                 .whereGreaterThan("terisi", 0)
                 .whereGreaterThanOrEqualTo("waktu", 1)
@@ -84,7 +108,7 @@ public class DashboardController {
                     if (!volumeList.isEmpty()) {
                         double yPrediksi = singleExponentialSmoothing(volumeList, timeList);
                         int timePrediction = (int) Math.round(yPrediksi);
-                        if(timePrediction > 0) {
+                        if (timePrediction > 0) {
                             estimasiView.setText(timePrediction + " menit hingga penuh");
                         } else {
                             estimasiView.setText("Tangki penuh");
@@ -115,4 +139,4 @@ public class DashboardController {
 
         return (maxVolumeValue - waterVolumeValue) / st;
     }
-} 
+}
