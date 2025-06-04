@@ -3,7 +3,9 @@ package com.bangraja.smartwatertank.view;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
     private CircleImageView imageView;
     private Switch bukaKeranOtomatis;
     private Button logoutBtn;
+    private LinearLayout bgProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +43,11 @@ public class SettingsActivity extends AppCompatActivity {
         bukaKeranOtomatis = findViewById(R.id.bukaKeranOtomatis);
         logoutBtn = findViewById(R.id.logoutBtn);
         backIcon = findViewById(R.id.backIcon);
+        bgProfile = findViewById(R.id.bgprofile);
 
         backIcon.setOnClickListener(v -> onBackPressed());
         new AuthController(new AuthModel()).displayUserProfile(emailView, nameView, imageView);
-        new CommandController(new CommandModel(), this).autoSwitch(bukaKeranOtomatis);
+        new CommandController(new CommandModel(), this).autoSwitch(bukaKeranOtomatis, bgProfile);
         logoutBtn.setOnClickListener(view -> new AuthController(new AuthModel()).logout(SettingsActivity.this));
     }
 }

@@ -106,6 +106,7 @@
 
     <!-- Container Kontrol -->
     <LinearLayout
+        android:id="@+id/bgprofile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_box"
