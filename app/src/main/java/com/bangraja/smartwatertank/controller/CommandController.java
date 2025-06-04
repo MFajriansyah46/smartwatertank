@@ -27,13 +27,18 @@ public class CommandController {
     }
 
     // Mengatur Switch untuk buka keran otomatis
-    public void autoSwitch(Switch bukaKeranOtomatis) {
+    public void autoSwitch(Switch bukaKeranOtomatis, LinearLayout bgProfile) {
 
         cm.getCommandRef().child("otomatis").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Boolean status = snapshot.getValue(Boolean.class);
                 bukaKeranOtomatis.setChecked(status != null && status);
+                if (status != null && status) {
+                    bgProfile.setBackground(ContextCompat.getDrawable(context, R.drawable.active_rounded_box));
+                } else {
+                    bgProfile.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_box));
+                }
             }
 
             @Override
