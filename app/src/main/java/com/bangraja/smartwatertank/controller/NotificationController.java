@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
@@ -27,6 +28,8 @@ public class NotificationController {
 
     private final NotificationModel nm;
     private static final String CHANNEL_ID = "smartwater_notif_channel";
+    private static final String PREFS_NAME = "SmartWaterPrefs";
+    private static final String KEY_LAST_PERCENT = "lastNotificationPercent";
 
     public NotificationController(NotificationModel nm) {
         this.nm = nm;
@@ -35,7 +38,6 @@ public class NotificationController {
     public void sendNotification(Context context, String pesan) {
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        // Waktu lokal
         Date now = new Date();
         String jam = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(now);
         String tanggal = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(now);
@@ -58,11 +60,9 @@ public class NotificationController {
     }
 
     private void showLocalNotification(Context context, String title, String message) {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
-                // Permission belum diberikan, jangan tampilkan notifikasi
                 Log.w("Notif", "Permission POST_NOTIFICATIONS belum diberikan");
                 return;
             }
@@ -88,6 +88,33 @@ public class NotificationController {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(1, builder.build());
+    }
+
+    public void checkWaterLevelAndNotify(int percent, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        int lastNotificationPercent = prefs.getInt(KEY_LAST_PERCENT, -1);
+
+        if (percent == lastNotificationPercent) {
+            // Kalau persentase sama dengan terakhir yang dikirim, jangan kirim notif
+            return;
+        }
+
+        String pesan = null;
+        if (percent == 100) {
+            pesan = "Air penuh";
+        } else if (percent == 90) {
+            pesan = "Sebentar lagi air penuh";
+        } else if (percent <= 20 && percent > 0) {
+            pesan = "Air akan habis";
+        } else if (percent == 0) {
+            pesan = "Air habis";
+        }
+
+        if (pesan != null) {
+            sendNotification(context, pesan);
+            // Simpan persentase terakhir ke SharedPreferences
+            prefs.edit().putInt(KEY_LAST_PERCENT, percent).apply();
+        }
     }
 
     private void createNotificationChannel(Context context) {

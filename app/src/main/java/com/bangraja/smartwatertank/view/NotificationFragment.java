@@ -1,5 +1,6 @@
 package com.bangraja.smartwatertank.view;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Button;
 import android.util.Log;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,8 +27,6 @@ import java.util.Map;
 public class NotificationFragment extends Fragment {
     private CollectionReference notifRef;
     private FirebaseFirestore db;
-
-    // Pastikan Log diimpor
     private static final String TAG = "NotificationFragment";
 
     @Nullable
@@ -35,6 +34,8 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_notification, container, false);
         LinearLayout notifContainer = view.findViewById(R.id.notifContainer);
+        Button btnMarkAllRead = view.findViewById(R.id.btnMarkAllRead);
+        Button btnDeleteAll = view.findViewById(R.id.btnDeleteAll); // tombol hapus semua
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -52,14 +53,58 @@ public class NotificationFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         notifRef = db.collection("tb_notifikasi");
 
+        // Tombol Tandai Semua Telah Dibaca
+        btnMarkAllRead.setOnClickListener(v -> {
+            notifRef.whereEqualTo("email", userEmail)
+                    .whereEqualTo("isRead", false)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        WriteBatch batch = db.batch();
+                        for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                            batch.update(doc.getReference(), "isRead", true);
+                        }
+                        batch.commit()
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "Semua notifikasi ditandai telah dibaca.");
+                                    updateBadge();
+                                })
+                                .addOnFailureListener(e -> Log.e(TAG, "Gagal tandai semua notifikasi", e));
+                    });
+        });
+
+        // ✅ Tombol Hapus Semua dengan konfirmasi
+        btnDeleteAll.setOnClickListener(v -> {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Konfirmasi")
+                    .setMessage("Apakah Anda yakin menghapus semua pesan?")
+                    .setPositiveButton("Ya", (dialog, which) -> {
+                        notifRef.whereEqualTo("email", userEmail)
+                                .get()
+                                .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    WriteBatch batch = db.batch();
+                                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                                        batch.delete(doc.getReference());
+                                    }
+                                    batch.commit()
+                                            .addOnSuccessListener(aVoid -> {
+                                                Log.d(TAG, "Semua notifikasi berhasil dihapus.");
+                                                updateBadge();
+                                            })
+                                            .addOnFailureListener(e -> Log.e(TAG, "Gagal menghapus semua notifikasi", e));
+                                });
+                    })
+                    .setNegativeButton("Batal", null)
+                    .show();
+        });
+
+        // Load Notifikasi
         notifRef.orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, exception) -> {
                     if (notifContainer == null || getContext() == null || snapshots == null) return;
 
                     Log.d(TAG, "Snapshots diterima, jumlah dokumen: " + snapshots.size());
-                    notifContainer.removeAllViews();
+                    notifContainer.removeViews(1, notifContainer.getChildCount() - 1); // jaga tombol tetap di atas
 
-                    int unreadCount = 0;
                     List<DocumentSnapshot> listNotif = snapshots.getDocuments();
 
                     for (DocumentSnapshot document : listNotif) {
@@ -72,14 +117,9 @@ public class NotificationFragment extends Fragment {
                         String tanggal = String.valueOf(data.get("tanggal"));
                         Boolean isRead = data.get("isRead") != null && (Boolean) data.get("isRead");
 
-                        Log.d(TAG, "Notifikasi diterima: " + pesan);
-
                         if (!email.equals(userEmail)) continue;
 
                         boolean unread = isRead == null || !isRead;
-                        if (unread) {
-                            unreadCount++;
-                        }
 
                         LinearLayout card = new LinearLayout(getContext());
                         card.setOrientation(LinearLayout.VERTICAL);
