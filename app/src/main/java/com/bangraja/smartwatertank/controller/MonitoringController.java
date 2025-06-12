@@ -21,6 +21,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.github.mikephil.charting.data.Entry;
@@ -95,9 +96,14 @@ public class MonitoringController {
         List<String> labels = new ArrayList<>();
 
         Collections.sort(documents, (d1, d2) -> {
-            Date date1 = d1.getTimestamp("timestamp").toDate();
-            Date date2 = d2.getTimestamp("timestamp").toDate();
-            return date1.compareTo(date2);
+            Timestamp ts1 = d1.getTimestamp("timestamp");
+            Timestamp ts2 = d2.getTimestamp("timestamp");
+
+            if (ts1 == null && ts2 == null) return 0;
+            if (ts1 == null) return 1;
+            if (ts2 == null) return -1;
+
+            return ts1.toDate().compareTo(ts2.toDate());
         });
 
         SimpleDateFormat sdf;
@@ -118,9 +124,10 @@ public class MonitoringController {
         for (int i = 0; i < documents.size(); i++) {
             DocumentSnapshot doc = documents.get(i);
             Double volume = doc.getDouble("water_volume");
-            Date date = doc.getTimestamp("timestamp").toDate();
+            Timestamp timestamp = doc.getTimestamp("timestamp");
 
-            if (volume != null && date != null) {
+            if (volume != null && timestamp != null) {
+                Date date = timestamp.toDate();
                 entries.add(new Entry(i, volume.floatValue()));
                 labels.add(sdf.format(date));
             }
@@ -153,7 +160,7 @@ public class MonitoringController {
         });
 
         lineChart.getLegend().setTextColor(Color.WHITE);
-        lineChart.getAxisLeft().setTextColor(Color.WHITE);
+        lineChart.getAxisLeft().setTextColor(Color.WHITE    );
         lineChart.getAxisLeft().setDrawGridLines(false);
         lineChart.getAxisRight().setEnabled(false);
         lineChart.setBackgroundColor(Color.TRANSPARENT);
