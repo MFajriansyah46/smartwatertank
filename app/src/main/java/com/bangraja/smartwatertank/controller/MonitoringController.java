@@ -240,9 +240,14 @@ public class MonitoringController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
 
         Collections.sort(documents, (d1, d2) -> {
-            Date t1 = d1.getTimestamp("timestamp").toDate();
-            Date t2 = d2.getTimestamp("timestamp").toDate();
-            return t2.compareTo(t1); // descending
+            Timestamp ts1 = d1.getTimestamp("timestamp");
+            Timestamp ts2 = d2.getTimestamp("timestamp");
+
+            if (ts1 == null && ts2 == null) return 0;
+            if (ts1 == null) return 1;
+            if (ts2 == null) return -1;
+
+            return ts2.toDate().compareTo(ts1.toDate());
         });
 
         for (DocumentSnapshot doc : documents) {
@@ -272,5 +277,4 @@ public class MonitoringController {
             }
         }
     }
-
 }
