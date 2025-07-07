@@ -60,7 +60,7 @@
                                 android:id="@+id/water_volume"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="879,56"
+                                android:text="- - -"
                                 android:textColor="@android:color/white"
                                 android:textSize="32sp"
                                 android:textStyle="bold" />
