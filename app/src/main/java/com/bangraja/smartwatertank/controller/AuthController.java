@@ -2,6 +2,7 @@ package com.bangraja.smartwatertank.controller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -45,6 +46,7 @@ public class AuthController {
             }
         });
     }
+
     public void logout(Activity activity) {
         am.getAuth().signOut();
         Intent intent = new Intent(activity, LoginActivity.class);
@@ -69,11 +71,16 @@ public class AuthController {
                             String nama = doc.getString("nama");
                             String gambar = doc.getString("gambar");
 
-                            if (nama != null) {
-                                nameView.setText(nama);
+                            if (nameView != null && nama != null) {
+                                SharedPreferences prefs = nameView.getContext().getSharedPreferences("UserPrefs", nameView.getContext().MODE_PRIVATE);
+                                String customName = prefs.getString("user_name", null);
+
+                                if (customName == null || customName.isEmpty()) {
+                                    nameView.setText(nama);
+                                }
                             }
 
-                            if (gambar != null && !gambar.isEmpty()) {
+                            if (gambar != null && !gambar.isEmpty() && imageView != null) {
                                 try {
                                     AssetManager assetManager = imageView.getContext().getAssets();
                                     InputStream is = assetManager.open(gambar);
